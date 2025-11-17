@@ -1,79 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lip's awesome site</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MetalliQuest — Accessible Landing</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 /* ===== Reset ===== */
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; font-family:'Roboto', sans-serif; overflow:hidden; }
+html, body { height:100%; font-family:'Roboto', sans-serif; }
+
+/* allow normal scrolling so mobile users can still use native gestures */
+body { overflow-y:auto; -webkit-overflow-scrolling:touch; }
+
+/* ===== Accessibility / reduced motion helper ===== */
+:focus { outline: 3px solid #ffd54f; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .glass-panel, .scroll-arrow { transition: none !important; animation: none !important; }
+}
 
 /* ===== Sections ===== */
-section { width:100%; height:100vh; display:flex; justify-content:center; align-items:center; position:relative; }
+section { width:100%; min-height:100vh; display:flex; justify-content:center; align-items:center; position:relative; padding:4vh 0; }
 
 /* ===== Glass Panels ===== */
 .glass-panel {
-  position:absolute;
-  width:90%;
-  max-width:600px;
-  padding:40px;
+  /* let flexbox center the panel instead of absolute positioning */
+  position:relative;
+  width: min(90%, 600px);
+  padding: clamp(18px, 4vw, 40px);
   border-radius:20px;
   backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.2);
+  -webkit-backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.12);
   text-align:center;
   transition: transform 0.7s ease, opacity 0.7s ease;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
 }
 
+/* make panels focusable for keyboard and screen readers */
+.glass-panel:focus { outline: 4px solid rgba(255,215,64,0.9); border-radius:18px; }
+
+/* Responsive image and text */
 .glass-panel img {
-  width:150px;
+  width:120px;
+  height:120px;
+  object-fit:cover;
   border-radius:12px;
-  margin-bottom:20px;
+  margin-bottom:18px;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 /* ===== Text Styles ===== */
-.glass-panel h1 { font-size:2rem; color:#fff; margin-bottom:10px; }
-.glass-panel p { color:#e0e0e0; }
+.glass-panel h1 { font-size:clamp(1.25rem, 3.5vw, 2rem); color:#fff; margin-bottom:10px; }
+.glass-panel p { color:#e6e6e6; font-size:clamp(0.95rem, 2.6vw, 1.05rem); line-height:1.4; }
 
-/* ===== Scroll Arrow ===== */
+/* ===== Scroll Arrow (now a button) ===== */
 .scroll-arrow {
   position:absolute;
-  bottom:30px;
-  font-size:2rem;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:1.75rem;
   color:#fff;
   cursor:pointer;
-  animation: bounce 2s infinite;
+  background: rgba(0,0,0,0.25);
+  border: none;
+  padding: 10px 14px;
+  border-radius: 999px;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
+.scroll-arrow:hover { transform:translateX(-50%) translateY(-4px); background: rgba(0,0,0,0.35); }
+
+/* gentler bounce but respect reduced-motion */
 @keyframes bounce {
   0%,20%,50%,80%,100%{transform:translateY(0);}
-  40%{transform:translateY(10px);}
-  60%{transform:translateY(5px);}
+  40%{transform:translateY(8px);}
+  60%{transform:translateY(4px);}
 }
+.scroll-arrow { animation: bounce 2.2s infinite; }
 
-/* ===== Second Panel Glass Buttons ===== */
-.second-panel {
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  margin-top:20px;
-}
-
+/* ===== Second Panel Buttons ===== */
+.second-panel { display:flex; flex-direction:column; gap:12px; margin-top:18px; align-items:center; }
 .glass-button {
-  padding:12px 20px;
+  padding:10px 18px;
   border-radius:12px;
-  border:2px solid rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.15);
+  border:2px solid rgba(255,255,255,0.32);
+  background: rgba(255,255,255,0.08);
   color:#fff;
   cursor:pointer;
-  transition: all 0.3s ease;
+  transition: background 0.25s ease, transform 0.12s ease;
+  min-width:160px;
 }
-.glass-button:hover {
-  background: rgba(255,255,255,0.25);
-  color:#f0f0f0;
-}
+.glass-button:active { transform: translateY(1px); }
+.glass-button:hover { background: rgba(255,255,255,0.14); }
 
-/* ===== Hero Background Image ===== */
+/* ===== Backgrounds ===== */
 #hero {
   background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat;
 }
@@ -81,85 +106,233 @@ section { width:100%; height:100vh; display:flex; justify-content:center; align-
   background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat;
 }
 
-/* ===== Panel Initial Positions ===== */
+/* ===== Panel Initial Transforms =====
+   Use viewport-based translation so the second panel sits centered after animation.
+   - hero-panel: at 0 when visible
+   - second-panel: start translated down by 100vh and invisible; will translate to 0 and become visible
+*/
 #hero .glass-panel { transform: translateY(0); opacity:1; z-index:2; }
-#second .glass-panel { transform: translateY(120vh); opacity:0; z-index:1; }
+#second .glass-panel { transform: translateY(100vh); opacity:0; z-index:1; }
+
+/* ===== Small screens tweaks ===== */
+@media (max-width:520px) {
+  .glass-panel { border-radius:14px; padding:18px; }
+  .glass-panel img { width:96px; height:96px; margin-bottom:12px; }
+  .scroll-arrow { bottom:14px; font-size:1.4rem; padding:8px 10px; }
+  .glass-button { min-width:140px; padding:10px 14px; }
+}
+
+/* make sure focusable controls are clear on dark background */
+button, .glass-button { font:inherit; }
+a.skip-link {
+  position:absolute; left:8px; top:8px; background:#000; color:#fff; padding:8px 12px; border-radius:6px;
+  z-index:9999; transform:translateY(-120%); transition:transform .18s ease;
+}
+a.skip-link:focus { transform:translateY(0); }
 </style>
 </head>
 <body>
 
+<!-- Skip link for keyboard users -->
+<a class="skip-link" href="#main" aria-hidden="false">Skip to content</a>
+
 <!-- Hero Section -->
-<section id="hero">
-  <div class="glass-panel" id="hero-panel">
+<section id="hero" role="region" aria-label="Welcome section">
+  <div class="glass-panel" id="hero-panel" role="region" aria-labelledby="hero-title" tabindex="-1" aria-hidden="false">
     <!-- IMAGE LINK: first panel image -->
-    <img src="https://source.unsplash.com/150x150/?avatar" alt="Sample Image">
-    <h1>Welcome to MetalliQuest</h1>
-    <p>Glass plateau with blurred background. Scroll down to see the second panel.</p>
+    <img src="https://source.unsplash.com/240x240/?avatar" alt="Portrait icon representing MetalliQuest" />
+    <h1 id="hero-title">Welcome to MetalliQuest</h1>
+    <p>Glass plateau with blurred background. Scroll or swipe down to see the second panel. You can also use arrow keys or Page Down.</p>
   </div>
-  <!-- Scroll arrow outside the panel -->
-  <div class="scroll-arrow" id="scroll-down">&#8595;</div>
+
+  <!-- Scroll arrow as a button for accessibility -->
+  <button class="scroll-arrow" id="scroll-down" aria-controls="second-panel" aria-label="Scroll to more content">▼</button>
 </section>
 
 <!-- Second Section -->
-<section id="second">
-  <div class="glass-panel" id="second-panel">
-    <h1>Explore More</h1>
+<section id="second" role="region" aria-label="Explore more section">
+  <div class="glass-panel" id="second-panel" role="region" aria-labelledby="second-title" tabindex="-1" aria-hidden="true">
+    <h1 id="second-title">Explore More</h1>
     <p>This panel also has a glass effect and buttons!</p>
     <div class="second-panel">
-      <button class="glass-button">Home</button>
-      <button class="glass-button">About</button>
-      <button class="glass-button">Projects</button>
-      <button class="glass-button">Contact</button>
+      <button class="glass-button" type="button">Home</button>
+      <button class="glass-button" type="button">About</button>
+      <button class="glass-button" type="button">Projects</button>
+      <button class="glass-button" type="button">Contact</button>
     </div>
   </div>
 </section>
 
 <script>
+/*
+  Accessibility and mobile improvements:
+  - Keyboard navigation (Arrow keys, PageUp/PageDown, Home/End)
+  - Touch swipe detection for mobile (swipe up/down)
+  - Reduced-motion support respected
+  - aria-hidden toggled for screen readers and panels made focusable
+  - Prevent native scrolling while animating to keep consistent transitions
+*/
+
 const heroPanel = document.getElementById('hero-panel');
 const secondPanel = document.getElementById('second-panel');
+const scrollDown = document.getElementById('scroll-down');
+
 let currentScreen = 0; // 0 = hero, 1 = second
 
-function goToSecond() {
-  heroPanel.style.transform = 'translateY(-120vh)';
-  heroPanel.style.opacity = 0;
-  heroPanel.style.zIndex = 1;
-
-  secondPanel.style.transform = 'translateY(0)';
-  secondPanel.style.opacity = 1;
-  secondPanel.style.zIndex = 2;
-
-  currentScreen = 1;
-}
-
-function goToHero() {
-  heroPanel.style.transform = 'translateY(0)';
-  heroPanel.style.opacity = 1;
-  heroPanel.style.zIndex = 2;
-
-  secondPanel.style.transform = 'translateY(120vh)';
-  secondPanel.style.opacity = 0;
-  secondPanel.style.zIndex = 1;
-
-  currentScreen = 0;
-}
-
-// Detect scroll (small movement triggers transition)
+// transition duration (ms) — keep in sync with CSS transition durations
+const TRANSITION_DURATION = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 700;
 let ticking = false;
-window.addEventListener('wheel', e => {
-  if (ticking) return;
+
+function setAriaStates() {
+  heroPanel.setAttribute('aria-hidden', currentScreen === 1 ? 'true' : 'false');
+  secondPanel.setAttribute('aria-hidden', currentScreen === 0 ? 'true' : 'false');
+}
+
+// focus helper: give focus to the panel for screen reader & keyboard users
+function focusPanel(panel) {
+  // panel has tabindex="-1" so it can be focused programmatically
+  panel.focus({ preventScroll: true });
+}
+
+// show the second panel centered
+function goToSecond() {
+  if (currentScreen === 1 || ticking) return;
   ticking = true;
 
-  if (e.deltaY > 0 && currentScreen === 0) {
-    goToSecond();
-  } else if (e.deltaY < 0 && currentScreen === 1) {
-    goToHero();
+  // animate panels
+  heroPanel.style.transform = 'translateY(-100vh)';
+  heroPanel.style.opacity = '0';
+  heroPanel.style.zIndex = '1';
+
+  secondPanel.style.transform = 'translateY(0)';
+  secondPanel.style.opacity = '1';
+  secondPanel.style.zIndex = '2';
+
+  currentScreen = 1;
+  setAriaStates();
+
+  // after animation, set focus to second panel
+  setTimeout(() => {
+    focusPanel(secondPanel);
+    ticking = false;
+  }, TRANSITION_DURATION + 20);
+}
+
+// return to hero and center it
+function goToHero() {
+  if (currentScreen === 0 || ticking) return;
+  ticking = true;
+
+  heroPanel.style.transform = 'translateY(0)';
+  heroPanel.style.opacity = '1';
+  heroPanel.style.zIndex = '2';
+
+  secondPanel.style.transform = 'translateY(100vh)';
+  secondPanel.style.opacity = '0';
+  secondPanel.style.zIndex = '1';
+
+  currentScreen = 0;
+  setAriaStates();
+
+  setTimeout(() => {
+    focusPanel(heroPanel);
+    ticking = false;
+  }, TRANSITION_DURATION + 20);
+}
+
+// Wheel handling (use passive:false so we can preventDefault when animating)
+window.addEventListener('wheel', function(e) {
+  // if user prefers reduced motion, don't hijack scrolling — allow natural scroll
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  if (ticking) {
+    e.preventDefault();
+    return;
   }
 
-  setTimeout(() => ticking = false, 300); // prevent multiple triggers
+  // small thresholds and only vertical movement matters
+  if (Math.abs(e.deltaY) < 10) return;
+
+  if (e.deltaY > 0 && currentScreen === 0) {
+    e.preventDefault();
+    goToSecond();
+  } else if (e.deltaY < 0 && currentScreen === 1) {
+    e.preventDefault();
+    goToHero();
+  }
+}, { passive: false });
+
+// Touch handling for mobile (swipe up / down)
+let touchStartY = 0;
+let touchEndY = 0;
+const TOUCH_THRESHOLD = 40; // px
+
+window.addEventListener('touchstart', (e) => {
+  if (e.touches && e.touches.length) touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+window.addEventListener('touchend', (e) => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  touchEndY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : touchEndY;
+  const delta = touchStartY - touchEndY;
+  if (Math.abs(delta) < TOUCH_THRESHOLD) return;
+
+  if (delta > 0 && currentScreen === 0) {
+    goToSecond(); // swipe up
+  } else if (delta < 0 && currentScreen === 1) {
+    goToHero(); // swipe down
+  }
+}, { passive: true });
+
+// Keyboard navigation (Arrow keys, PageDown/Up, Home/End, Space)
+window.addEventListener('keydown', (e) => {
+  // if focus is on an input or editable area, ignore
+  const active = document.activeElement;
+  if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) return;
+
+  if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+    if (currentScreen === 0) {
+      e.preventDefault();
+      goToSecond();
+    }
+  } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    if (currentScreen === 1) {
+      e.preventDefault();
+      goToHero();
+    }
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    goToHero();
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    goToSecond();
+  }
 });
 
-// Scroll arrow click
-document.getElementById('scroll-down').addEventListener('click', goToSecond);
+// scroll arrow click
+scrollDown.addEventListener('click', (e) => {
+  e.preventDefault();
+  goToSecond();
+});
+
+// Make sure aria states are correct on load
+setAriaStates();
+
+// If user resizes or rotates the device, ensure panels are in correct visual state
+window.addEventListener('resize', () => {
+  // ensure transforms match currentScreen (fixes occasionally stuck transforms on rotation)
+  if (currentScreen === 0) {
+    heroPanel.style.transform = 'translateY(0)';
+    heroPanel.style.opacity = '1';
+    secondPanel.style.transform = 'translateY(100vh)';
+    secondPanel.style.opacity = '0';
+  } else {
+    heroPanel.style.transform = 'translateY(-100vh)';
+    heroPanel.style.opacity = '0';
+    secondPanel.style.transform = 'translateY(0)';
+    secondPanel.style.opacity = '1';
+  }
+});
 </script>
 
 </body>
