@@ -1,35 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MetalliQuest</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1a1a1a, #3f3f46);
-      color: white;
-      text-align: center;
-    }
-    .box {
-      padding: 30px 40px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 16px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-    }
-    h1 { margin-bottom: 10px; }
-    p { color: #d1d5db; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetalliQuest Glass Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== Reset & Basic Styles ===== */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body, html { height: 100%; scroll-behavior: smooth; font-family: 'Roboto', sans-serif; }
+  section { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; transition: background 1s ease; }
+
+  /* ===== Backgrounds ===== */
+  #hero { 
+    background: url('https://source.unsplash.com/1600x900/?nature,abstract') center/cover no-repeat; 
+  }
+  #content { 
+    background: #fff; 
+    color: #555;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ===== Glass Panel ===== */
+  .glass {
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .glass img {
+    width: 150px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+  .glass h1 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .glass p {
+    color: #e0e0e0;
+  }
+
+  /* ===== Scroll Arrow ===== */
+  .scroll-arrow {
+    position: absolute;
+    bottom: 30px;
+    font-size: 2rem;
+    color: #fff;
+    animation: bounce 2s infinite;
+    cursor: pointer;
+  }
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(10px); }
+    60% { transform: translateY(5px); }
+  }
+
+  /* ===== Second Section Buttons ===== */
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .buttons button {
+    background: #fff;
+    border: 2px solid #ccc;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    color: #777;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .buttons button:hover {
+    color: #333;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  /* ===== Hero fade out on scroll ===== */
+  .fade-out {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+</style>
 </head>
 <body>
-  <div class="box">
+
+<!-- Hero Section -->
+<section id="hero">
+  <div class="glass" id="glass-panel">
+    <img src="https://source.unsplash.com/150x150/?avatar" alt="Sample Image">
     <h1>Welcome to MetalliQuest</h1>
-    <p>Your main site is now live! Add more pages whenever you want.</p>
+    <p>Clean glass plateau design with a blurred background. Scroll down to explore more.</p>
   </div>
+  <div class="scroll-arrow" id="scroll-arrow">&#8595;</div>
+</section>
+
+<!-- Second Section -->
+<section id="content">
+  <div class="buttons">
+    <button>Home</button>
+    <button>About</button>
+    <button>Projects</button>
+    <button>Contact</button>
+  </div>
+</section>
+
+<script>
+  const hero = document.getElementById('hero');
+  const glass = document.getElementById('glass-panel');
+  const scrollArrow = document.getElementById('scroll-arrow');
+
+  // Scroll arrow click
+  scrollArrow.addEventListener('click', () => {
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+  });
+
+  // Fade glass panel on scroll
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (scrollY > window.innerHeight * 0.1) {
+      glass.classList.add('fade-out');
+      scrollArrow.classList.add('fade-out');
+      hero.style.background = 'linear-gradient(to bottom, #fff, #fff)';
+    } else {
+      glass.classList.remove('fade-out');
+      scrollArrow.classList.remove('fade-out');
+      hero.style.background = "url('https://source.unsplash.com/1600x900/?nature,abstract') center/cover no-repeat";
+    }
+  });
+</script>
+
 </body>
 </html>
