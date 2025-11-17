@@ -3,34 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lip's awesome site</title>
+<title>MetalliQuest Liquid Glass</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ===== Reset ===== */
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { height:100%; font-family:'Roboto', sans-serif; scroll-behavior:smooth; }
 
-/* ===== Sections ===== */
-section { width:100%; min-height:100vh; display:flex; justify-content:center; align-items:center; position:relative; }
-
-/* ===== Hero Section ===== */
-#hero {
-  background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat;
+/* ===== Background ===== */
+body {
+  background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat fixed;
   background-size: cover;
-  flex-direction: column;
 }
 
-/* ===== Glass Panel ===== */
+/* ===== Scroll Arrow ===== */
+.scroll-arrow {
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:2rem;
+  color:#fff;
+  cursor:pointer;
+  animation: bounce 2s infinite;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+  z-index:10;
+}
+@keyframes bounce {
+  0%,20%,50%,80%,100%{transform:translate(-50%,0);}
+  40%{transform:translate(-50%,10px);}
+  60%{transform:translate(-50%,5px);}
+}
+
+/* ===== Sections ===== */
+section { width:100%; padding:100px 20px; display:flex; justify-content:center; }
+
+/* ===== Glass Panels ===== */
 .glass-panel {
   width:90%;
   max-width:600px;
   padding:40px;
   border-radius:20px;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px) saturate(150%);
   background: rgba(255,255,255,0.2);
   text-align:center;
   margin-bottom:40px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .glass-panel img {
@@ -42,39 +60,7 @@ section { width:100%; min-height:100vh; display:flex; justify-content:center; al
 .glass-panel h1 { font-size:2rem; color:#fff; margin-bottom:10px; }
 .glass-panel p { color:#e0e0e0; }
 
-/* ===== Scroll Arrow ===== */
-.scroll-arrow {
-  font-size:2rem;
-  color:#fff;
-  cursor:pointer;
-  animation: bounce 2s infinite;
-  transition: opacity 0.4s ease, filter 0.4s ease;
-}
-@keyframes bounce {
-  0%,20%,50%,80%,100%{transform:translateY(0);}
-  40%{transform:translateY(10px);}
-  60%{transform:translateY(5px);}
-}
-
-/* ===== Second Section ===== */
-#second {
-  background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat;
-  background-size: cover;
-  padding:80px 20px;
-  display:flex;
-  justify-content:center;
-}
-
-#second .glass-panel {
-  width:90%;
-  max-width:600px;
-  padding:40px;
-  border-radius:20px;
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.2);
-  text-align:center;
-}
-
+/* ===== Second Panel Buttons ===== */
 .second-panel {
   display:flex;
   flex-direction:column;
@@ -99,21 +85,23 @@ section { width:100%; min-height:100vh; display:flex; justify-content:center; al
 </head>
 <body>
 
-<!-- Hero Section -->
-<section id="hero">
+<!-- Scroll Arrow -->
+<div class="scroll-arrow" id="scroll-arrow">&#8595;</div>
+
+<!-- Hero Panel -->
+<section>
   <div class="glass-panel">
     <img src="https://source.unsplash.com/150x150/?avatar" alt="Sample Image">
     <h1>Welcome to MetalliQuest</h1>
-    <p>Glass plateau with blurred background. Scroll down to see the second panel.</p>
+    <p>This is a liquid glass panel over a fixed background. Scroll down to explore.</p>
   </div>
-  <div class="scroll-arrow" id="scroll-down">&#8595;</div>
 </section>
 
-<!-- Second Section -->
-<section id="second">
+<!-- Second Panel -->
+<section>
   <div class="glass-panel">
     <h1>Explore More</h1>
-    <p>This panel also has a glass effect and buttons!</p>
+    <p>Second panel with interactive glass buttons.</p>
     <div class="second-panel">
       <button class="glass-button">Home</button>
       <button class="glass-button">About</button>
@@ -124,23 +112,20 @@ section { width:100%; min-height:100vh; display:flex; justify-content:center; al
 </section>
 
 <script>
-const scrollArrow = document.getElementById('scroll-down');
+const arrow = document.getElementById('scroll-arrow');
 
 window.addEventListener('scroll', () => {
   if (window.scrollY > 50) {
-    // Fade out arrow with blur when scrolling down
-    scrollArrow.style.opacity = 0;
-    scrollArrow.style.filter = 'blur(4px)';
+    arrow.style.opacity = 0;
+    arrow.style.filter = 'blur(4px)';
   } else {
-    // Fade back in when scrolling up
-    scrollArrow.style.opacity = 1;
-    scrollArrow.style.filter = 'blur(0px)';
+    arrow.style.opacity = 1;
+    arrow.style.filter = 'blur(0px)';
   }
 });
 
-// Scroll arrow click scrolls to second section
-scrollArrow.addEventListener('click', () => {
-  document.getElementById('second').scrollIntoView({ behavior: 'smooth' });
+arrow.addEventListener('click', () => {
+  window.scrollBy({ top: window.innerHeight, behavior:'smooth' });
 });
 </script>
 
