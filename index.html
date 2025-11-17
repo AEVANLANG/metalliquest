@@ -83,7 +83,7 @@ section { width:100%; height:100vh; display:flex; justify-content:center; align-
 
 /* ===== Panel Initial Positions ===== */
 #hero .glass-panel { transform: translateY(0); opacity:1; z-index:2; }
-#second .glass-panel { transform: translateY(100vh); opacity:0; z-index:1; }
+#second .glass-panel { transform: translateY(120vh); opacity:0; z-index:1; }
 </style>
 </head>
 <body>
@@ -96,6 +96,7 @@ section { width:100%; height:100vh; display:flex; justify-content:center; align-
     <h1>Welcome to MetalliQuest</h1>
     <p>Glass plateau with blurred background. Scroll down to see the second panel.</p>
   </div>
+  <!-- Scroll arrow outside the panel -->
   <div class="scroll-arrow" id="scroll-down">&#8595;</div>
 </section>
 
@@ -119,7 +120,7 @@ const secondPanel = document.getElementById('second-panel');
 let currentScreen = 0; // 0 = hero, 1 = second
 
 function goToSecond() {
-  heroPanel.style.transform = 'translateY(-100vh)';
+  heroPanel.style.transform = 'translateY(-120vh)';
   heroPanel.style.opacity = 0;
   heroPanel.style.zIndex = 1;
 
@@ -135,7 +136,7 @@ function goToHero() {
   heroPanel.style.opacity = 1;
   heroPanel.style.zIndex = 2;
 
-  secondPanel.style.transform = 'translateY(100vh)';
+  secondPanel.style.transform = 'translateY(120vh)';
   secondPanel.style.opacity = 0;
   secondPanel.style.zIndex = 1;
 
