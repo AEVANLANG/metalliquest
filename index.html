@@ -36,7 +36,15 @@ body {
 }
 
 /* ===== Sections ===== */
-section { width:100%; padding:100px 20px; display:flex; justify-content:center; }
+section {
+  width:100%;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center; /* centers panels vertically */
+  padding:80px 20px; /* optional slight padding for spacing */
+  flex-direction: column;
+}
 
 /* ===== Glass Panels ===== */
 .glass-panel {
