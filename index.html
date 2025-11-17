@@ -3,138 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MetalliQuest Glass Page</title>
+<title>Lip's awesome site</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* ===== Reset & Basic Styles ===== */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body, html { height: 100%; scroll-behavior: smooth; font-family: 'Roboto', sans-serif; }
-  section { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; transition: background 1s ease; }
+/* ===== Reset ===== */
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; font-family:'Roboto', sans-serif; overflow:hidden; }
 
-  /* ===== Backgrounds ===== */
-  #hero { 
-    background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat; 
-  }
-  #content { 
-    background: #fff; 
-    color: #555;
-    flex-direction: column;
-    gap: 2rem;
-  }
+/* ===== Sections ===== */
+section { width:100%; height:100vh; display:flex; justify-content:center; align-items:center; position:relative; }
 
-  /* ===== Glass Panel ===== */
-  .glass {
-    backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 40px;
-    text-align: center;
-    max-width: 500px;
-    transition: opacity 1s ease, transform 1s ease;
-  }
-  .glass img {
-    width: 150px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-  }
-  .glass h1 {
-    font-size: 2rem;
-    color: #fff;
-    margin-bottom: 10px;
-  }
-  .glass p {
-    color: #e0e0e0;
-  }
+/* ===== Glass Panels ===== */
+.glass-panel {
+  position:absolute;
+  width:90%;
+  max-width:600px;
+  padding:40px;
+  border-radius:20px;
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.2);
+  text-align:center;
+  transition: transform 0.7s ease, opacity 0.7s ease;
+}
 
-  /* ===== Scroll Arrow ===== */
-  .scroll-arrow {
-    position: absolute;
-    bottom: 30px;
-    font-size: 2rem;
-    color: #fff;
-    animation: bounce 2s infinite;
-    cursor: pointer;
-  }
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(10px); }
-    60% { transform: translateY(5px); }
-  }
+.glass-panel img {
+  width:150px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
 
-  /* ===== Second Section Buttons ===== */
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .buttons button {
-    background: #fff;
-    border: 2px solid #ccc;
-    padding: 15px 25px;
-    border-radius: 12px;
-    font-weight: 700;
-    color: #777;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  .buttons button:hover {
-    color: #333;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  }
+/* ===== Text Styles ===== */
+.glass-panel h1 { font-size:2rem; color:#fff; margin-bottom:10px; }
+.glass-panel p { color:#e0e0e0; }
 
-  /* ===== Hero fade out on scroll ===== */
-  .fade-out {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
+/* ===== Scroll Arrow ===== */
+.scroll-arrow {
+  position:absolute;
+  bottom:30px;
+  font-size:2rem;
+  color:#fff;
+  cursor:pointer;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,20%,50%,80%,100%{transform:translateY(0);}
+  40%{transform:translateY(10px);}
+  60%{transform:translateY(5px);}
+}
+
+/* ===== Second Panel Glass Buttons ===== */
+.second-panel {
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  margin-top:20px;
+}
+
+.glass-button {
+  padding:12px 20px;
+  border-radius:12px;
+  border:2px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.15);
+  color:#fff;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+.glass-button:hover {
+  background: rgba(255,255,255,0.25);
+  color:#f0f0f0;
+}
+
+/* ===== Hero Background Image ===== */
+#hero {
+  background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat;
+}
+#second {
+  background: url('https://northernmysticmedia.com/wp-content/uploads/2024/08/LoZ-Overlook-Scenery-v2-Thumbnail.jpg') center/cover no-repeat;
+}
+
+/* ===== Panel Initial Positions ===== */
+#hero .glass-panel { transform: translateY(0); opacity:1; z-index:2; }
+#second .glass-panel { transform: translateY(100vh); opacity:0; z-index:1; }
 </style>
 </head>
 <body>
 
 <!-- Hero Section -->
 <section id="hero">
-  <div class="glass" id="glass-panel">
+  <div class="glass-panel" id="hero-panel">
+    <!-- IMAGE LINK: first panel image -->
     <img src="https://source.unsplash.com/150x150/?avatar" alt="Sample Image">
     <h1>Welcome to MetalliQuest</h1>
-    <p>Clean glass plateau design with a blurred background. Scroll down to explore more.</p>
+    <p>Glass plateau with blurred background. Scroll down to see the second panel.</p>
+    <div class="scroll-arrow" id="scroll-down">&#8595;</div>
   </div>
-  <div class="scroll-arrow" id="scroll-arrow">&#8595;</div>
 </section>
 
 <!-- Second Section -->
-<section id="content">
-  <div class="buttons">
-    <button>Home</button>
-    <button>About</button>
-    <button>Projects</button>
-    <button>Contact</button>
+<section id="second">
+  <div class="glass-panel" id="second-panel">
+    <h1>Explore More</h1>
+    <p>This panel also has a glass effect and buttons!</p>
+    <div class="second-panel">
+      <button class="glass-button">Home</button>
+      <button class="glass-button">About</button>
+      <button class="glass-button">Projects</button>
+      <button class="glass-button">Contact</button>
+    </div>
   </div>
 </section>
 
 <script>
-  const hero = document.getElementById('hero');
-  const glass = document.getElementById('glass-panel');
-  const scrollArrow = document.getElementById('scroll-arrow');
+const heroPanel = document.getElementById('hero-panel');
+const secondPanel = document.getElementById('second-panel');
+let currentScreen = 0; // 0 = hero, 1 = second
 
-  // Scroll arrow click
-  scrollArrow.addEventListener('click', () => {
-    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-  });
+function goToSecond() {
+  heroPanel.style.transform = 'translateY(-100vh)';
+  heroPanel.style.opacity = 0;
+  heroPanel.style.zIndex = 1;
 
-  // Fade glass panel on scroll
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    if (scrollY > window.innerHeight * 0.1) {
-      glass.classList.add('fade-out');
-      scrollArrow.classList.add('fade-out');
-      hero.style.background = 'linear-gradient(to bottom, #fff, #fff)';
-    } else {
-      glass.classList.remove('fade-out');
-      scrollArrow.classList.remove('fade-out');
-      hero.style.background = "url('https://source.unsplash.com/1600x900/?nature,abstract') center/cover no-repeat";
-    }
-  });
+  secondPanel.style.transform = 'translateY(0)';
+  secondPanel.style.opacity = 1;
+  secondPanel.style.zIndex = 2;
+
+  currentScreen = 1;
+}
+
+function goToHero() {
+  heroPanel.style.transform = 'translateY(0)';
+  heroPanel.style.opacity = 1;
+  heroPanel.style.zIndex = 2;
+
+  secondPanel.style.transform = 'translateY(100vh)';
+  secondPanel.style.opacity = 0;
+  secondPanel.style.zIndex = 1;
+
+  currentScreen = 0;
+}
+
+// Detect scroll (small movement triggers transition)
+let ticking = false;
+window.addEventListener('wheel', e => {
+  if (ticking) return;
+  ticking = true;
+
+  if (e.deltaY > 0 && currentScreen === 0) {
+    goToSecond();
+  } else if (e.deltaY < 0 && currentScreen === 1) {
+    goToHero();
+  }
+
+  setTimeout(() => ticking = false, 300); // prevent multiple triggers
+});
+
+// Scroll arrow click
+document.getElementById('scroll-down').addEventListener('click', goToSecond);
 </script>
 
 </body>
