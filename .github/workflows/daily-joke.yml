@@ -1,0 +1,35 @@
+name: Daily Joke Generator
+
+on:
+  schedule:
+    - cron: "5 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pillow
+
+      - name: Generate daily joke image
+        run: |
+          python scripts/generate_image.py
+
+      - name: Commit and push image
+        run: |
+          git config user.name "daily-joke-bot"
+          git config user.email "bot@metalliquest.nl"
+          git add dailyjoke/today.png
+          git commit -m "Update daily joke image" || echo "No changes to commit"
+          git push
