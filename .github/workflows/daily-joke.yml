@@ -33,3 +33,4 @@ jobs:
           git add dailyjoke/today.png
           git commit -m "Update daily joke image" || echo "No changes to commit"
           git push
+
