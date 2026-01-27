@@ -1,8 +1,6 @@
-name: Daily Joke Generator
+name: Generate Daily Joke (Manual)
 
 on:
-  schedule:
-    - cron: "5 0 * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,27 +8,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install pillow
+        run: pip install pillow
 
-      - name: Generate daily joke image
-        run: |
-          python scripts/generate_image.py
+      - name: Generate image
+        run: python scripts/generate_image.py
 
-      - name: Commit and push image
+      - name: Force update timestamp
+        run: |
+          touch dailyjoke/today.png
+
+      - name: Commit and push
         run: |
           git config user.name "daily-joke-bot"
           git config user.email "bot@metalliquest.nl"
           git add dailyjoke/today.png
-          git commit -m "Update daily joke image" || echo "No changes to commit"
+          git commit -m "Update today.png" --allow-empty
           git push
-
