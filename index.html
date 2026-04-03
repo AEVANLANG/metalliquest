@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>METALLIQUEST.NL</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Special+Elite&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blood: #8b0000;
+      --crimson: #c0392b;
+      --rust: #a04020;
+      --bone: #c8b89a;
+      --parchment: #1a1208;
+      --dark: #0d0a06;
+      --darker: #080604;
+      --dim: #2a1f14;
+      --pixel-gold: #f0c040;
+      --pixel-green: #40c060;
+      --pixel-blue: #4080f0;
+      --pixel-red: #f04040;
+      --scanline: rgba(0,0,0,0.15);
+    }
+
+```
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--dark);
+  color: var(--bone);
+  font-family: 'Special Elite', cursive;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, var(--scanline) 3px, var(--scanline) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  position: relative;
+  border-bottom: 3px solid var(--blood);
+  background: radial-gradient(ellipse at center top, #1a0800 0%, var(--dark) 70%);
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238b0000' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.site-title {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: clamp(2.8rem, 10vw, 6rem);
+  color: var(--bone);
+  text-shadow: 0 0 20px var(--blood), 0 0 60px rgba(139,0,0,0.4), 3px 3px 0 #000;
+  letter-spacing: 2px;
+  animation: flicker 6s infinite;
+  line-height: 1;
+}
+
+.site-tld { color: var(--crimson); text-shadow: 0 0 15px var(--crimson); }
+
+.skull-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+}
+
+.tagline {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--rust);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+
+nav {
+  background: var(--darker);
+  border-bottom: 2px solid var(--dim);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+nav a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--rust);
+  text-decoration: none;
+  padding: 0.7rem 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-right: 1px solid var(--dim);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+nav a:hover {
+  color: var(--pixel-gold);
+  background: rgba(139,0,0,0.2);
+  text-shadow: 0 0 8px var(--pixel-gold);
+}
+
+nav a::before { content: '▸ '; }
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+section { margin: 3rem 0; position: relative; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 1.8rem;
+  color: var(--crimson);
+  text-shadow: 0 0 10px rgba(139,0,0,0.5);
+}
+
+.section-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--blood), transparent);
+}
+
+.pixel-divider {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--blood);
+  letter-spacing: 4px;
+  margin: 1rem 0;
+  font-family: monospace;
+}
+
+.grunge-box {
+  background: var(--dim);
+  border: 2px solid var(--blood);
+  border-radius: 2px;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 4px 4px 0 #000;
+}
+
+.grunge-box::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(139,0,0,0.2);
+  pointer-events: none;
+}
+
+.about-text {
+  line-height: 1.8;
+  font-size: 0.95rem;
+  color: var(--bone);
+}
+
+.about-text em {
+  color: var(--pixel-gold);
+  font-style: normal;
+}
+
+.rpg-stats {
+  margin-top: 1.2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.stat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--pixel-green);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stat-bar {
+  flex: 1;
+  height: 6px;
+  background: #111;
+  border: 1px solid #333;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background: var(--pixel-green);
+  box-shadow: 0 0 4px var(--pixel-green);
+  animation: statLoad 1.5s ease-out forwards;
+}
+
+.stat-val {
+  color: var(--pixel-gold);
+  min-width: 28px;
+}
+
+.domain-proclamation {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 1.1rem;
+  text-align: center;
+  line-height: 2;
+  color: var(--bone);
+}
+
+.domain-name-big {
+  display: block;
+  font-size: 2rem;
+  color: var(--pixel-gold);
+  text-shadow: 0 0 15px rgba(240,192,64,0.5);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.sarcasm-fine-print {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: #555;
+  text-align: center;
+  margin-top: 1rem;
+  letter-spacing: 1px;
+}
+
+.trophy-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.trophy {
+  text-align: center;
+  font-size: 0.65rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--pixel-gold);
+}
+
+.trophy-icon {
+  font-size: 1.6rem;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+
+.trophy:nth-child(2) .trophy-icon { animation-delay: 0.5s; }
+.trophy:nth-child(3) .trophy-icon { animation-delay: 1s; }
+.trophy:nth-child(4) .trophy-icon { animation-delay: 1.5s; }
+
+/* ALBUM FLIPPER */
+.album-stage {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.album-art-wrap {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  flex-shrink: 0;
+}
+
+.album-art-placeholder {
+  width: 190px;
+  height: 190px;
+  background: var(--dim);
+  border: 3px solid var(--blood);
+  box-shadow: 0 0 20px rgba(139,0,0,0.4), 6px 6px 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--rust);
+  text-align: center;
+  padding: 1rem;
+  transition: border-color 0.3s;
+}
+
+.album-placeholder-icon { font-size: 3.5rem; }
+
+.vinyl-spin {
+  position: absolute;
+  top: 50%;
+  right: -28px;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #222 28%, #111 30%, #1a1a1a 58%, #111 60%, #222 100%);
+  border: 2px solid #333;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.vinyl-spin::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--crimson);
+  box-shadow: 0 0 4px var(--crimson);
+}
+
+.vinyl-spin.spinning { animation: spin 4s linear infinite; }
+
+.album-info { flex: 1; min-width: 180px; }
+
+.album-band {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 1.5rem;
+  text-shadow: 0 0 8px rgba(192,57,43,0.4);
+  line-height: 1.1;
+  transition: color 0.3s;
+}
+
+.album-name {
+  font-family: 'Special Elite', cursive;
+  font-size: 1rem;
+  color: var(--bone);
+  margin: 0.3rem 0;
+}
+
+.album-year {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--rust);
+  letter-spacing: 2px;
+}
+
+.album-desc {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 0.8rem;
+  line-height: 1.6;
+}
+
+.pixel-player {
+  background: #0a0a0a;
+  border: 2px solid var(--dim);
+  padding: 0.8rem 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.now-playing-dot {
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.now-playing-dot.active {
+  background: var(--pixel-red);
+  animation: blink 1s step-end infinite;
+}
+
+.track-label {
+  color: var(--pixel-green);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-btn {
+  background: none;
+  border: 1px solid var(--blood);
+  color: var(--pixel-gold);
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+
+.play-btn:hover { background: var(--blood); color: #fff; }
+
+.album-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: var(--dim);
+  border: 2px solid var(--blood);
+  color: var(--bone);
+  cursor: pointer;
+  padding: 0.4rem 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.nav-btn:hover {
+  background: var(--blood);
+  color: #fff;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #000;
+}
+
+.nav-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #000;
+}
+
+.album-dots { display: flex; gap: 0.5rem; align-items: center; }
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--dim);
+  border: 1px solid var(--blood);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dot.active {
+  background: var(--crimson);
+  box-shadow: 0 0 6px var(--crimson);
+}
+
+.corner-deco {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--blood);
+  border-style: solid;
+  opacity: 0.7;
+}
+.corner-deco.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.corner-deco.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.corner-deco.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.corner-deco.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+footer {
+  border-top: 3px solid var(--blood);
+  text-align: center;
+  padding: 2rem 1rem;
+  background: var(--darker);
+  margin-top: 4rem;
+}
+
+.footer-skull { font-size: 1.5rem; animation: float 3s ease-in-out infinite; }
+
+.footer-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--rust);
+  letter-spacing: 2px;
+  margin-top: 0.5rem;
+}
+
+.footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #333;
+  margin-top: 0.5rem;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--darker); }
+::-webkit-scrollbar-thumb { background: var(--blood); }
+
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.8; }
+  97% { opacity: 1; }
+  98% { opacity: 0.6; }
+  99% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { text-shadow: 0 0 15px rgba(240,192,64,0.5); }
+  50% { text-shadow: 0 0 30px rgba(240,192,64,0.9), 0 0 60px rgba(240,192,64,0.3); }
+}
+
+@keyframes statLoad {
+  from { width: 0; }
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.album-anim { animation: fadeSlide 0.3s ease-out; }
+```
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="site-title">Metalliquest<span class="site-tld">.nl</span></div>
+  <div class="skull-row">
+    <span>☠</span><span>⚔</span><span>🜏</span><span>⚔</span><span>☠</span>
+  </div>
+  <div class="tagline">▓▒░ Est. Because I Could ░▒▓</div>
+</header>
+
+<nav>
+  <a href="#about">Who</a>
+  <a href="#domain">Domain</a>
+  <a href="#albums">Albums</a>
+  <a href="#lair">Lair</a>
+</nav>
+
+<main>
+
+  <section id="about">
+    <div class="section-header">
+      <span class="section-title">The Legend</span>
+      <div class="section-line"></div>
+      <span style="font-size:1.2rem">⚔</span>
+    </div>
+    <div class="grunge-box">
+      <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+      <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+      <p class="about-text">
+        Greetings, wanderer. You've stumbled upon the digital realm of
+        <em>Metalliquest</em> — gamer tag, username, general identity since before
+        you were probably relevant. I built this website for absolutely no
+        practical reason whatsoever. It does nothing. It serves no one.
+        And I love it.
+      </p>
+      <div class="rpg-stats">
+        <div class="stat">
+          <span>TASTE</span>
+          <div class="stat-bar"><div class="stat-fill" style="width:95%"></div></div>
+          <span class="stat-val">95</span>
+        </div>
+        <div class="stat">
+          <span>NERD</span>
+          <div class="stat-bar"><div class="stat-fill" style="width:88%"></div></div>
+          <span class="stat-val">88</span>
+        </div>
+        <div class="stat">
+          <span>ROCK</span>
+          <div class="stat-bar"><div class="stat-fill" style="width:100%;background:var(--crimson);box-shadow:0 0 4px var(--crimson)"></div></div>
+          <span class="stat-val">MAX</span>
+        </div>
+        <div class="stat">
+          <span>SLEEP</span>
+          <div class="stat-bar"><div class="stat-fill" style="width:22%;background:var(--pixel-red);box-shadow:0 0 4px var(--pixel-red)"></div></div>
+          <span class="stat-val">22</span>
+        </div>
+        <div class="stat">
+          <span>LINUX</span>
+          <div class="stat-bar"><div class="stat-fill" style="width:75%;background:var(--pixel-blue);box-shadow:0 0 4px var(--pixel-blue)"></div></div>
+          <span class="stat-val">75</span>
+        </div>
+        <div class="stat">
+          <span>CHILL</span>
+          <div class="stat-bar"><div class="stat-fill" style="width:60%"></div></div>
+          <span class="stat-val">60</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
+
+  <section id="domain">
+    <div class="section-header">
+      <span class="section-title">The Domain</span>
+      <div class="section-line"></div>
+      <span style="font-size:1.2rem">🜏</span>
+    </div>
+    <div class="grunge-box" style="text-align:center">
+      <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+      <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+      <div class="domain-proclamation">
+        I hereby declare ownership of
+        <span class="domain-name-big">metalliquest.nl</span>
+        and I shall use it for absolutely nothing important.
+      </div>
+      <div class="trophy-row">
+        <div class="trophy"><span class="trophy-icon">👑</span>DOMAIN LORD</div>
+        <div class="trophy"><span class="trophy-icon">🗡️</span>NO PURPOSE</div>
+        <div class="trophy"><span class="trophy-icon">⚡</span>CLOUDFLARE</div>
+        <div class="trophy"><span class="trophy-icon">🔒</span>TUNNELS???</div>
+      </div>
+      <div class="sarcasm-fine-print">
+        * yes i have a domain. no you cannot have it. yes this is the whole website.<br>
+        * there may or may not be things running behind this domain. you will never know.
+      </div>
+    </div>
+  </section>
+
+  <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
+
+  <section id="albums">
+    <div class="section-header">
+      <span class="section-title">Sacred Texts</span>
+      <div class="section-line"></div>
+      <span style="font-size:1.2rem">🎵</span>
+    </div>
+
+```
+<div class="album-stage">
+  <div class="album-art-wrap">
+    <div class="album-art-placeholder" id="albumArt">
+      <span class="album-placeholder-icon" id="albumIcon">💿</span>
+      <span id="albumArtLabel" style="font-size:0.6rem;opacity:0.5">add img src in albums[]</span>
+    </div>
+    <div class="vinyl-spin" id="vinylEl"></div>
+  </div>
+
+  <div class="album-info">
+    <div class="album-band" id="albumBand">—</div>
+    <div class="album-name" id="albumName">—</div>
+    <div class="album-year" id="albumYear">[ ████ ]</div>
+    <div class="album-desc" id="albumDesc">...</div>
+    <div class="pixel-player">
+      <div class="now-playing-dot" id="recDot"></div>
+      <span class="track-label" id="trackLabel">[ NO SIGNAL ]</span>
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ PLAY</button>
+    </div>
+  </div>
+</div>
+
+<div class="album-nav">
+  <button class="nav-btn" onclick="prevAlbum()">◀ PREV</button>
+  <div class="album-dots" id="albumDots"></div>
+  <button class="nav-btn" onclick="nextAlbum()">NEXT ▶</button>
+</div>
+```
+
+  </section>
+
+  <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
+
+  <section id="lair">
+    <div class="section-header">
+      <span class="section-title">The Lair</span>
+      <div class="section-line"></div>
+      <span style="font-size:1.2rem">🖥</span>
+    </div>
+    <div class="grunge-box">
+      <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+      <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+      <p class="about-text" style="margin-bottom:1rem">
+        Deep within the dungeon lies a Raspberry Pi. It hums quietly.
+        It knows things. <em>I will not be elaborating further.</em>
+      </p>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:#555;line-height:2.2">
+        <div>[ <span style="color:var(--pixel-green)">ONLINE &nbsp;</span> ] ██████████████ classified_service_1</div>
+        <div>[ <span style="color:var(--pixel-green)">ONLINE &nbsp;</span> ] ██████████████ classified_service_2</div>
+        <div>[ <span style="color:var(--pixel-gold)">PRIVATE</span> ] ██████████████ ?????????.internal</div>
+        <div>[ <span style="color:var(--blood)">REDACTED</span> ] ██████████████ you_dont_need_to_know</div>
+      </div>
+      <div class="sarcasm-fine-print" style="margin-top:1rem">
+        * all tunnels are cloudflare-secured and none of your business
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-skull">☠</div>
+  <div class="footer-text">METALLIQUEST.NL — ALL RIGHTS ENFORCED BY VIBES</div>
+  <div class="footer-copy">made with questionable decisions © forever</div>
+</footer>
+
+<audio id="audioPlayer"></audio>
+
+<script>
+  /*
+   * ALBUMS CONFIG
+   * - Set `audio` to a URL of a short audio clip / preview (mp3, ogg, etc.)
+   *   You can self-host these or use any publicly accessible URL.
+   * - Set `img` to a URL or relative path for the album art image.
+   * - Leave null to skip that feature.
+   */
+  const albums = [
+    {
+      band: "Metallica",
+      name: "Master of Puppets",
+      year: "1986",
+      desc: "The one that started everything.\nNon-negotiable.",
+      track: "Master of Puppets",
+      icon: "🎸",
+      color: "#c0392b",
+      img: null,
+      audio: null
+    },
+    {
+      band: "Linkin Park",
+      name: "Hybrid Theory",
+      year: "2000",
+      desc: "Yes it's basic. No I do not care.\nIt changed lives.",
+      track: "In the End",
+      icon: "⚡",
+      color: "#4080f0",
+      img: null,
+      audio: null
+    },
+    {
+      band: "System of a Down",
+      name: "Toxicity",
+      year: "2001",
+      desc: "Chaotic. Unhinged. Perfect.\nLike this website.",
+      track: "Chop Suey!",
+      icon: "🔥",
+      color: "#a040c0",
+      img: null,
+      audio: null
+    },
+    {
+      band: "Tool",
+      name: "Ænima",
+      year: "1996",
+      desc: "For when you want to feel things\nyou can't explain.",
+      track: "Forty Six & 2",
+      icon: "🌀",
+      color: "#40a060",
+      img: null,
+      audio: null
+    },
+    {
+      band: "Alice in Chains",
+      name: "Dirt",
+      year: "1992",
+      desc: "Grunge royalty.\nHeavy as the darkness itself.",
+      track: "Would?",
+      icon: "💀",
+      color: "#a04020",
+      img: null,
+      audio: null
+    }
+  ];
+
+  let current = 0;
+  let isPlaying = false;
+  const audioEl = document.getElementById('audioPlayer');
+
+  function renderDots() {
+    const container = document.getElementById('albumDots');
+    container.innerHTML = albums.map((_, i) =>
+      `<div class="dot ${i === current ? 'active' : ''}" onclick="goAlbum(${i})"></div>`
+    ).join('');
+  }
+
+  function triggerAnim(el) {
+    el.classList.remove('album-anim');
+    void el.offsetWidth;
+    el.classList.add('album-anim');
+  }
+
+  function updateAlbum() {
+    const a = albums[current];
+
+    document.getElementById('albumBand').textContent = a.band;
+    document.getElementById('albumBand').style.color = a.color;
+    document.getElementById('albumName').textContent = a.name;
+    document.getElementById('albumYear').textContent = `[ ${a.year} ]`;
+    document.getElementById('albumDesc').textContent = a.desc;
+    document.getElementById('trackLabel').textContent = `♪ ${a.track}`;
+    document.getElementById('albumIcon').textContent = a.icon;
+
+    const artEl = document.getElementById('albumArt');
+    if (a.img) {
+      artEl.innerHTML = `<img src="${a.img}" alt="${a.band} - ${a.name}" style="width:100%;height:100%;object-fit:cover;display:block;" />`;
+    } else {
+      artEl.innerHTML = `<span class="album-placeholder-icon" id="albumIcon">${a.icon}</span><span style="font-size:0.6rem;opacity:0.5">add img src in albums[]</span>`;
+    }
+    artEl.style.borderColor = a.color;
+
+    triggerAnim(document.getElementById('albumBand'));
+    triggerAnim(document.getElementById('albumDesc'));
+
+    stopPlayback();
+    renderDots();
+  }
+
+  function stopPlayback() {
+    isPlaying = false;
+    audioEl.pause();
+    audioEl.currentTime = 0;
+    document.getElementById('playBtn').textContent = '▶ PLAY';
+    document.getElementById('recDot').classList.remove('active');
+    document.getElementById('vinylEl').classList.remove('spinning');
+  }
+
+  function prevAlbum() { current = (current - 1 + albums.length) % albums.length; updateAlbum(); }
+  function nextAlbum() { current = (current + 1) % albums.length; updateAlbum(); }
+  function goAlbum(i) { current = i; updateAlbum(); }
+
+  function togglePlay() {
+    const a = albums[current];
+    if (!a.audio) {
+      document.getElementById('trackLabel').textContent = '[ ADD AUDIO URL IN albums[] ]';
+      return;
+    }
+    if (!isPlaying) {
+      audioEl.src = a.audio;
+      audioEl.play();
+      isPlaying = true;
+      document.getElementById('playBtn').textContent = '■ STOP';
+      document.getElementById('recDot').classList.add('active');
+      document.getElementById('vinylEl').classList.add('spinning');
+    } else {
+      stopPlayback();
+    }
+  }
+
+  audioEl.addEventListener('ended', stopPlayback);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') prevAlbum();
+    if (e.key === 'ArrowRight') nextAlbum();
+  });
+
+  let touchX = null;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? nextAlbum() : prevAlbum();
+    touchX = null;
+  });
+
+  renderDots();
+  updateAlbum();
+</script>
+
+</body>
+</html>
