@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -22,479 +23,524 @@
       --scanline: rgba(0,0,0,0.15);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      background-color: var(--dark);
-      color: var(--bone);
-      font-family: 'Special Elite', cursive;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0.4;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, var(--scanline) 3px, var(--scanline) 4px);
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    header {
-      text-align: center;
-      padding: 3rem 1rem 2rem;
-      position: relative;
-      border-bottom: 3px solid var(--blood);
-      background: radial-gradient(ellipse at center top, #1a0800 0%, var(--dark) 70%);
-      overflow: hidden;
-    }
-
-    header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238b0000' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.5;
-    }
-
-    .site-title {
-      font-family: 'Manufacturing Consent', cursive;
-      font-size: clamp(2.8rem, 10vw, 6rem);
-      color: var(--bone);
-      text-shadow: 0 0 20px var(--blood), 0 0 60px rgba(139,0,0,0.4), 3px 3px 0 #000;
-      letter-spacing: 2px;
-      animation: flicker 6s infinite;
-      line-height: 1;
-    }
-
-    .site-tld { color: var(--crimson); text-shadow: 0 0 15px var(--crimson); }
-
-    .skull-row {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      margin: 0.8rem 0;
-      font-size: 1.1rem;
-    }
-
-    .tagline {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--rust);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-top: 0.4rem;
-    }
-
-    nav {
-      background: var(--darker);
-      border-bottom: 2px solid var(--dim);
-      padding: 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: center;
-      overflow-x: auto;
-    }
-
-    nav a {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--rust);
-      text-decoration: none;
-      padding: 0.7rem 1rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-right: 1px solid var(--dim);
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    nav a:hover {
-      color: var(--pixel-gold);
-      background: rgba(139,0,0,0.2);
-      text-shadow: 0 0 8px var(--pixel-gold);
-    }
-
-    nav a::before { content: '▸ '; }
-
-    main {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    section { margin: 3rem 0; position: relative; }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-title {
-      font-family: 'Manufacturing Consent', cursive;
-      font-size: 1.8rem;
-      color: var(--crimson);
-      text-shadow: 0 0 10px rgba(139,0,0,0.5);
-    }
-
-    .section-line {
-      flex: 1;
-      height: 2px;
-      background: linear-gradient(to right, var(--blood), transparent);
-    }
-
-    .pixel-divider {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--blood);
-      letter-spacing: 4px;
-      margin: 1rem 0;
-      font-family: monospace;
-    }
-
-    .grunge-box {
-      background: var(--dim);
-      border: 2px solid var(--blood);
-      border-radius: 2px;
-      padding: 1.8rem;
-      position: relative;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 4px 4px 0 #000;
-    }
-
-    .grunge-box::before {
-      content: '';
-      position: absolute;
-      inset: 4px;
-      border: 1px solid rgba(139,0,0,0.2);
-      pointer-events: none;
-    }
-
-    .about-text {
-      line-height: 1.8;
-      font-size: 0.95rem;
-      color: var(--bone);
-    }
-
-    .about-text em {
-      color: var(--pixel-gold);
-      font-style: normal;
-    }
-
-    .rpg-stats {
-      margin-top: 1.2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-    }
-
-    .stat {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--pixel-green);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .stat-bar {
-      flex: 1;
-      height: 6px;
-      background: #111;
-      border: 1px solid #333;
-      overflow: hidden;
-    }
-
-    .stat-fill {
-      height: 100%;
-      background: var(--pixel-green);
-      box-shadow: 0 0 4px var(--pixel-green);
-      animation: statLoad 1.5s ease-out forwards;
-    }
-
-    .stat-val {
-      color: var(--pixel-gold);
-      min-width: 28px;
-    }
-
-    .domain-proclamation {
-      font-family: 'Special Elite', cursive;
-      font-size: 1.1rem;
-      text-align: center;
-      line-height: 2;
-      color: var(--bone);
-    }
-
-    .domain-name-big {
-      display: block;
-      font-size: 2rem;
-      color: var(--pixel-gold);
-      text-shadow: 0 0 15px rgba(240,192,64,0.5);
-      animation: pulse 4s ease-in-out infinite;
-    }
-
-    .sarcasm-fine-print {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: #555;
-      text-align: center;
-      margin-top: 1rem;
-      letter-spacing: 1px;
-    }
-
-    .trophy-row {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
-    }
-
-    .trophy {
-      text-align: center;
-      font-size: 0.65rem;
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--pixel-gold);
-    }
-
-    .trophy-icon {
-      font-size: 1.6rem;
-      display: block;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .album-stage {
-      display: flex;
-      align-items: flex-start;
-      gap: 2rem;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .album-art-wrap {
-      position: relative;
-      width: 190px;
-      height: 190px;
-      flex-shrink: 0;
-    }
-
-    .album-art-placeholder {
-      width: 100%;
-      height: 100%;
-      background: var(--dim);
-      border: 3px solid var(--blood);
-      box-shadow: 0 0 20px rgba(139,0,0,0.4), 6px 6px 0 #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 0.5rem;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--rust);
-      text-align: center;
-      padding: 1rem;
-      transition: border-color 0.3s;
-    }
-
-    @media (max-width: 620px) {
-      .album-stage { gap: 1.4rem; }
-      .album-art-wrap { width: 165px; height: 165px; }
-      .album-info { min-width: 100%; text-align: center; }
-    }
-
-    .corner-deco {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      border-color: var(--blood);
-      border-style: solid;
-      opacity: 0.7;
-    }
-
-    .corner-deco.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
-    .corner-deco.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
-    .corner-deco.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
-    .corner-deco.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
-
-    /* Disable text selection globally but allow on descriptions */
-    body, main, section, div, p, span {
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-    }
-
-    .about-text { user-select: text; }
-
-    /* VINYL GALLERY */
-    .vinyl-gallery-wrap {
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding-bottom: 0.5rem;
-    }
-
-    .vinyl-gallery-wrap::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .vinyl-gallery-wrap::-webkit-scrollbar-track {
-      background: #120d09;
-      border: 1px solid var(--dim);
-    }
-
-    .vinyl-gallery-wrap::-webkit-scrollbar-thumb {
-      background: var(--blood);
-    }
-
-    #vinyl-gallery * {
-      all: unset;
-    }
-
-    #vinyl-gallery {
-      all: initial !important;
-      width: max-content !important;
-      min-width: 100% !important;
-      height: 230px !important;
-      margin: 10px 0 0 !important;
-      display: flex !important;
-      flex-direction: row !important;
-      position: relative !important;
-      padding-left: 8px !important;
-      padding-right: 18px !important;
-    }
-
-    #vinyl-gallery .vinyl {
-      all: unset !important;
-      perspective: 500px !important;
-      width: 18px !important;
-      transition: width 0.5s !important;
-      position: relative !important;
-    }
-
-    #vinyl-gallery .vinyl:hover {
-      width: 148px !important;
-    }
-
-    #vinyl-gallery img {
-      all: unset !important;
-      transition: transform 0.5s, width 0.5s, height 0.5s, margin-top 0.5s !important;
-      width: 180px !important;
-      height: 180px !important;
-      transform: rotateX(0deg) rotateY(25deg) !important;
-      transform-style: preserve-3d !important;
-      border-radius: 4px !important;
-      border: 2px solid rgba(0, 0, 0, 0.1) !important;
-      object-fit: cover !important;
-      box-shadow: 0 0 14px rgba(139,0,0,0.35), 4px 4px 0 #000 !important;
-    }
-
-    #vinyl-gallery .vinyl:hover img {
-      transform: rotateX(0deg) rotateY(10deg) !important;
-      width: 188px !important;
-      height: 188px !important;
-      margin-top: -2px !important;
-    }
-
-    #vinyl-gallery .title {
-      color: var(--bone) !important;
-      display: block !important;
-      visibility: hidden !important;
-      position: absolute !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      text-align: center !important;
-      width: 100% !important;
-      padding-left: 6px !important;
-      font-family: 'Share Tech Mono', monospace !important;
-      font-size: 11px !important;
-      letter-spacing: 1px !important;
-      text-shadow: 0 0 8px rgba(0,0,0,0.9) !important;
-      white-space: nowrap !important;
-    }
-
-    #vinyl-gallery .vinyl:nth-child(n):hover + .title {
-      visibility: visible !important;
-    }
-
-    .vinyl-note {
-      margin-top: 1rem;
-      text-align: center;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: #666;
-      letter-spacing: 1px;
-    }
-
-    footer {
-      border-top: 3px solid var(--blood);
-      text-align: center;
-      padding: 2rem 1rem;
-      background: var(--darker);
-      margin-top: 4rem;
-    }
-
-    .footer-skull { font-size: 1.5rem; animation: float 3s ease-in-out infinite; }
-
-    .footer-text {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--rust);
-      letter-spacing: 2px;
-      margin-top: 0.5rem;
-    }
-
-    .footer-copy {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.6rem;
-      color: #333;
-      margin-top: 0.5rem;
-    }
-
-    @keyframes flicker {
-      0%, 95%, 100% { opacity: 1; }
-      96% { opacity: 0.8; }
-      97% { opacity: 1; }
-      98% { opacity: 0.6; }
-      99% { opacity: 1; }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    @keyframes pulse {
-      0%, 100% { text-shadow: 0 0 15px rgba(240,192,64,0.5); }
-      50% { text-shadow: 0 0 30px rgba(240,192,64,0.9), 0 0 60px rgba(240,192,64,0.3); }
-    }
-
-    @keyframes statLoad {
-      from { width: 0; }
-    }
+```
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--dark);
+  color: var(--bone);
+  font-family: 'Special Elite', cursive;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, var(--scanline) 3px, var(--scanline) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  position: relative;
+  border-bottom: 3px solid var(--blood);
+  background: radial-gradient(ellipse at center top, #1a0800 0%, var(--dark) 70%);
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238b0000' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.site-title {
+  font-family: 'Manufacturing Consent', cursive;
+  font-size: clamp(2.8rem, 10vw, 6rem);
+  color: var(--bone);
+  text-shadow: 0 0 20px var(--blood), 0 0 60px rgba(139,0,0,0.4), 3px 3px 0 #000;
+  letter-spacing: 2px;
+  animation: flicker 6s infinite;
+  line-height: 1;
+}
+
+.site-tld { color: var(--crimson); text-shadow: 0 0 15px var(--crimson); }
+
+.skull-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+}
+
+.tagline {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--rust);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+
+nav {
+  background: var(--darker);
+  border-bottom: 2px solid var(--dim);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+nav a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--rust);
+  text-decoration: none;
+  padding: 0.7rem 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-right: 1px solid var(--dim);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+nav a:hover {
+  color: var(--pixel-gold);
+  background: rgba(139,0,0,0.2);
+  text-shadow: 0 0 8px var(--pixel-gold);
+}
+
+nav a::before { content: '▸ '; }
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+section { margin: 3rem 0; position: relative; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: 'Manufacturing Consent', cursive;
+  font-size: 1.8rem;
+  color: var(--crimson);
+  text-shadow: 0 0 10px rgba(139,0,0,0.5);
+}
+
+.section-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--blood), transparent);
+}
+
+.pixel-divider {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--blood);
+  letter-spacing: 4px;
+  margin: 1rem 0;
+  font-family: monospace;
+}
+
+.grunge-box {
+  background: var(--dim);
+  border: 2px solid var(--blood);
+  border-radius: 2px;
+  padding: 1.8rem;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 4px 4px 0 #000;
+}
+
+.grunge-box::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(139,0,0,0.2);
+  pointer-events: none;
+}
+
+.about-text {
+  line-height: 1.8;
+  font-size: 0.95rem;
+  color: var(--bone);
+}
+
+.about-text em {
+  color: var(--pixel-gold);
+  font-style: normal;
+}
+
+.rpg-stats {
+  margin-top: 1.2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.stat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--pixel-green);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stat-bar {
+  flex: 1;
+  height: 6px;
+  background: #111;
+  border: 1px solid #333;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background: var(--pixel-green);
+  box-shadow: 0 0 4px var(--pixel-green);
+  animation: statLoad 1.5s ease-out forwards;
+}
+
+.stat-val {
+  color: var(--pixel-gold);
+  min-width: 28px;
+}
+
+.domain-proclamation {
+  font-family: 'Special Elite', cursive;
+  font-size: 1.1rem;
+  text-align: center;
+  line-height: 2;
+  color: var(--bone);
+}
+
+.domain-name-big {
+  display: block;
+  font-size: 2rem;
+  color: var(--pixel-gold);
+  text-shadow: 0 0 15px rgba(240,192,64,0.5);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.sarcasm-fine-print {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: #555;
+  text-align: center;
+  margin-top: 1rem;
+  letter-spacing: 1px;
+}
+
+.trophy-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.trophy {
+  text-align: center;
+  font-size: 0.65rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--pixel-gold);
+}
+
+.trophy-icon {
+  font-size: 1.6rem;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+
+.album-stage {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.album-art-wrap {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  flex-shrink: 0;
+}
+
+.album-art-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--dim);
+  border: 3px solid var(--blood);
+  box-shadow: 0 0 20px rgba(139,0,0,0.4), 6px 6px 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--rust);
+  text-align: center;
+  padding: 1rem;
+  transition: border-color 0.3s;
+}
+
+@media (max-width: 620px) {
+  .album-stage { gap: 1.4rem; }
+  .album-art-wrap { width: 165px; height: 165px; }
+  .album-info { min-width: 100%; text-align: center; }
+}
+
+.corner-deco {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--blood);
+  border-style: solid;
+  opacity: 0.7;
+}
+
+.corner-deco.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.corner-deco.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.corner-deco.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.corner-deco.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+/* Disable text selection globally but allow on descriptions */
+body, main, section, div, p, span {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.about-text { user-select: text; }
+
+/* SOCIAL LINKS */
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone);
+  background: #1a1208;
+  border: 1px solid var(--blood);
+  padding: 0.45rem 0.85rem;
+  box-shadow: 2px 2px 0 #000;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.social-btn:hover {
+  background: var(--blood);
+  color: var(--bone);
+  box-shadow: 3px 3px 0 #000;
+  transform: translate(-1px, -1px);
+}
+
+.social-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #000;
+}
+
+.social-btn svg {
+  flex-shrink: 0;
+}
+
+/* VINYL GALLERY */
+.vinyl-gallery-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.5rem;
+}
+
+.vinyl-gallery-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+
+.vinyl-gallery-wrap::-webkit-scrollbar-track {
+  background: #120d09;
+  border: 1px solid var(--dim);
+}
+
+.vinyl-gallery-wrap::-webkit-scrollbar-thumb {
+  background: var(--blood);
+}
+
+#vinyl-gallery * {
+  all: unset;
+}
+
+#vinyl-gallery {
+  all: initial !important;
+  width: max-content !important;
+  min-width: 100% !important;
+  height: 230px !important;
+  margin: 10px 0 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  position: relative !important;
+  padding-left: 8px !important;
+  padding-right: 18px !important;
+}
+
+#vinyl-gallery .vinyl {
+  all: unset !important;
+  perspective: 500px !important;
+  width: 18px !important;
+  transition: width 0.5s !important;
+  position: relative !important;
+}
+
+#vinyl-gallery .vinyl:hover {
+  width: 148px !important;
+}
+
+#vinyl-gallery img {
+  all: unset !important;
+  transition: transform 0.5s, width 0.5s, height 0.5s, margin-top 0.5s !important;
+  width: 180px !important;
+  height: 180px !important;
+  transform: rotateX(0deg) rotateY(25deg) !important;
+  transform-style: preserve-3d !important;
+  border-radius: 4px !important;
+  border: 2px solid rgba(0, 0, 0, 0.1) !important;
+  object-fit: cover !important;
+  box-shadow: 0 0 14px rgba(139,0,0,0.35), 4px 4px 0 #000 !important;
+}
+
+#vinyl-gallery .vinyl:hover img {
+  transform: rotateX(0deg) rotateY(10deg) !important;
+  width: 188px !important;
+  height: 188px !important;
+  margin-top: -2px !important;
+}
+
+#vinyl-gallery .title {
+  color: var(--bone) !important;
+  display: block !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  text-align: center !important;
+  width: 100% !important;
+  padding-left: 6px !important;
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  text-shadow: 0 0 8px rgba(0,0,0,0.9) !important;
+  white-space: nowrap !important;
+}
+
+#vinyl-gallery .vinyl:nth-child(n):hover + .title {
+  visibility: visible !important;
+}
+
+.vinyl-note {
+  margin-top: 1rem;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+footer {
+  border-top: 3px solid var(--blood);
+  text-align: center;
+  padding: 2rem 1rem;
+  background: var(--darker);
+  margin-top: 4rem;
+}
+
+.footer-skull { font-size: 1.5rem; animation: float 3s ease-in-out infinite; }
+
+.footer-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--rust);
+  letter-spacing: 2px;
+  margin-top: 0.5rem;
+}
+
+.footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #333;
+  margin-top: 0.5rem;
+}
+
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.8; }
+  97% { opacity: 1; }
+  98% { opacity: 0.6; }
+  99% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { text-shadow: 0 0 15px rgba(240,192,64,0.5); }
+  50% { text-shadow: 0 0 30px rgba(240,192,64,0.9), 0 0 60px rgba(240,192,64,0.3); }
+}
+
+@keyframes statLoad {
+  from { width: 0; }
+}
+```
+
   </style>
 </head>
 <body>
@@ -524,6 +570,32 @@
       <p class="about-text">
         idk what to put here
       </p>
+      <div class="social-links">
+        <a class="social-btn" href="mailto:YOUR@EMAIL.COM">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+          </svg>
+          Mail
+        </a>
+        <a class="social-btn" href="https://www.tiktok.com/@YOURUSERNAME" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.28 8.28 0 0 0 4.84 1.54V7.05a4.85 4.85 0 0 1-1.07-.36z"/>
+          </svg>
+          TikTok
+        </a>
+        <a class="social-btn" href="https://www.instagram.com/YOURUSERNAME" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+          Instagram
+        </a>
+        <a class="social-btn" href="https://www.snapchat.com/add/YOURUSERNAME" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.01 2C8.57 2 6 4.57 6 8.01v1.5c-.55.1-1.1.3-1.5.6-.4.27-.5.73-.23 1.1.27.38.73.48 1.13.27.1-.06.23-.1.37-.14-.2.5-.47.97-.8 1.4-.13.17-.1.4.07.53.93.67 2.03.77 2.97.77.13.53.63.9 1.2.9.6 0 1.1-.4 1.23-.97.27.03.53.07.8.07.27 0 .53-.03.8-.07.13.57.63.97 1.23.97.57 0 1.07-.37 1.2-.9.93 0 2.03-.1 2.97-.77.17-.13.2-.37.07-.53-.33-.43-.6-.9-.8-1.4.13.03.27.07.37.13.4.2.87.1 1.13-.27.27-.37.17-.83-.23-1.1-.4-.3-.97-.5-1.5-.6V8.01C18.01 4.57 15.45 2 12.01 2z"/>
+          </svg>
+          Snapchat
+        </a>
+      </div>
     </div>
   </section>
 
@@ -565,31 +637,34 @@
       <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
       <div class="corner-deco bl"></div><div class="corner-deco br"></div>
 
-      <div class="album-stage" style="margin-bottom:1rem;">
-        <div class="album-art-wrap" style="width:170px;height:170px;">
-          <div id="np-art" class="album-art-placeholder"></div>
-        </div>
-      </div>
-
-      <div id="np-info">
-        <div id="np-track" style="font-family:'Special Elite',cursive; font-size:1.15rem; color:var(--bone);">THE SOUND OF SILENCE</div>
-        <div id="np-artist" style="font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:var(--rust);">NOTHING IS PLAYING</div>
-      </div>
-
-      <div id="np-progress-container" style="margin-top:1.4rem; max-width:340px; margin-left:auto; margin-right:auto;">
-        <div style="height:5px; background:#111; border:1px solid var(--blood); position:relative; overflow:hidden;">
-          <div id="np-progress" style="height:100%; width:0%; background:var(--pixel-green); box-shadow:0 0 6px var(--pixel-green); transition:width .8s linear;"></div>
-        </div>
-        <div style="display:flex; justify-content:space-between; font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:#666; margin-top:5px;">
-          <span id="np-time-elapsed">0:00</span>
-          <span id="np-time-total">-:--</span>
-        </div>
-      </div>
-
-      <div class="sarcasm-fine-print" style="margin-top:1.2rem;">
-        the progress bar is not accurate.. just for the aesthetics yk
-      </div>
+```
+  <div class="album-stage" style="margin-bottom:1rem;">
+    <div class="album-art-wrap" style="width:170px;height:170px;">
+      <div id="np-art" class="album-art-placeholder"></div>
     </div>
+  </div>
+
+  <div id="np-info">
+    <div id="np-track" style="font-family:'Special Elite',cursive; font-size:1.15rem; color:var(--bone);">THE SOUND OF SILENCE</div>
+    <div id="np-artist" style="font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:var(--rust);">NOTHING IS PLAYING</div>
+  </div>
+
+  <div id="np-progress-container" style="margin-top:1.4rem; max-width:340px; margin-left:auto; margin-right:auto;">
+    <div style="height:5px; background:#111; border:1px solid var(--blood); position:relative; overflow:hidden;">
+      <div id="np-progress" style="height:100%; width:0%; background:var(--pixel-green); box-shadow:0 0 6px var(--pixel-green); transition:width .8s linear;"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:#666; margin-top:5px;">
+      <span id="np-time-elapsed">0:00</span>
+      <span id="np-time-total">-:--</span>
+    </div>
+  </div>
+
+  <div class="sarcasm-fine-print" style="margin-top:1.2rem;">
+    the progress bar is not accurate.. just for the aesthetics yk
+  </div>
+</div>
+```
+
   </section>
 
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
@@ -601,98 +676,101 @@
       <span style="font-size:1.2rem">🎵</span>
     </div>
 
-    <div class="grunge-box">
-      <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
-      <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+```
+<div class="grunge-box">
+  <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+  <div class="corner-deco bl"></div><div class="corner-deco br"></div>
 
-      <div class="vinyl-gallery-wrap">
-        <div id="vinyl-gallery">
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/0fa37201b199941562f3078dedf5caae/11993756" alt="Radiohead - OK Computer" />
-          </div>
-          <div class="title">Radiohead - OK Computer</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/4e8c3063c201131309b0b8aca74cbf39/7486511" alt="Kanye West - Graduation" />
-          </div>
-          <div class="title">Kanye West - Graduation</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/b247aad651a50441d1ab19af10b13bdc/2519110" alt="Mamma Mia! Cast - Mamma Mia!" />
-          </div>
-          <div class="title">Mamma Mia! Cast - Mamma Mia!</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/dee39e33a94c9f39f235edc19c1e8aae/3065862" alt="Type O Negative - Life Is Killing Me" />
-          </div>
-          <div class="title">Type O Negative - Life Is Killing Me</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/6d47e24fa1e249c1a1e2e07407949ef6/6019602" alt="Queen - A Night At The Opera" />
-          </div>
-          <div class="title">Queen - A Night At The Opera</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/6367de5980825b58203148d4f3e3115b/11498909" alt="Within Temptation - Bleed Out" />
-          </div>
-          <div class="title">Within Temptation - Bleed Out</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/1efad621d148000adb29a9b5936ddd1a/12096297" alt="Eminem - The Eminem Show" />
-          </div>
-          <div class="title">Eminem - The Eminem Show</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/e0b26a2a4bf44554967d39b384e47a0b/3192426" alt="Eminem - Recovery" />
-          </div>
-          <div class="title">Eminem - Recovery</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/664208ed63016b84e94b30a9302df49e/1311548" alt="Eminem - Encore" />
-          </div>
-          <div class="title">Eminem - Encore</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/c6da6729de4ed204f919c0045a746663/5077469" alt="My Chemical Romance - The Black Parade" />
-          </div>
-          <div class="title">My Chemical Romance - The Black Parade</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/78049219c4c5c75358ed75c3ef41a968/12925580" alt="My Chemical Romance - Three Cheers For Sweet Revenge" />
-          </div>
-          <div class="title">My Chemical Romance - Three Cheers For Sweet Revenge</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/904eac6738aaab5991bf1e012d4aec22/10434801" alt="The Who - Who's Next" />
-          </div>
-          <div class="title">The Who - Who's Next</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/3d66a82002366484f85bee8aafb0e1bd/13348930" alt="Blur - Blur" />
-          </div>
-          <div class="title">Blur - Blur</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/e5ec5b4de1d42e4a36e298c50a6682bd/2984854" alt="Slipknot - Slipknot" />
-          </div>
-          <div class="title">Slipknot - Slipknot</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/45d159c535f12195b04472bbb13d53dc/6807170" alt="Evanescence - Fallen" />
-          </div>
-          <div class="title">Evanescence - Fallen</div>
-
-          <div class="vinyl">
-            <img src="//e.snmc.io/i/300/w/fb4993dd5b8fddb51266a3e2adcd524c/12508134" alt="Deftones - Around The Fur" />
-          </div>
-          <div class="title">Deftones - Around The Fur</div>
-        </div>
+  <div class="vinyl-gallery-wrap">
+    <div id="vinyl-gallery">
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/0fa37201b199941562f3078dedf5caae/11993756" alt="Radiohead - OK Computer" />
       </div>
+      <div class="title">Radiohead - OK Computer</div>
 
-      <div class="vinyl-note">
-        hover for titles :0
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/4e8c3063c201131309b0b8aca74cbf39/7486511" alt="Kanye West - Graduation" />
       </div>
+      <div class="title">Kanye West - Graduation</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/b247aad651a50441d1ab19af10b13bdc/2519110" alt="Mamma Mia! Cast - Mamma Mia!" />
+      </div>
+      <div class="title">Mamma Mia! Cast - Mamma Mia!</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/dee39e33a94c9f39f235edc19c1e8aae/3065862" alt="Type O Negative - Life Is Killing Me" />
+      </div>
+      <div class="title">Type O Negative - Life Is Killing Me</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/6d47e24fa1e249c1a1e2e07407949ef6/6019602" alt="Queen - A Night At The Opera" />
+      </div>
+      <div class="title">Queen - A Night At The Opera</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/6367de5980825b58203148d4f3e3115b/11498909" alt="Within Temptation - Bleed Out" />
+      </div>
+      <div class="title">Within Temptation - Bleed Out</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/1efad621d148000adb29a9b5936ddd1a/12096297" alt="Eminem - The Eminem Show" />
+      </div>
+      <div class="title">Eminem - The Eminem Show</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/e0b26a2a4bf44554967d39b384e47a0b/3192426" alt="Eminem - Recovery" />
+      </div>
+      <div class="title">Eminem - Recovery</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/664208ed63016b84e94b30a9302df49e/1311548" alt="Eminem - Encore" />
+      </div>
+      <div class="title">Eminem - Encore</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/c6da6729de4ed204f919c0045a746663/5077469" alt="My Chemical Romance - The Black Parade" />
+      </div>
+      <div class="title">My Chemical Romance - The Black Parade</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/78049219c4c5c75358ed75c3ef41a968/12925580" alt="My Chemical Romance - Three Cheers For Sweet Revenge" />
+      </div>
+      <div class="title">My Chemical Romance - Three Cheers For Sweet Revenge</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/904eac6738aaab5991bf1e012d4aec22/10434801" alt="The Who - Who's Next" />
+      </div>
+      <div class="title">The Who - Who's Next</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/3d66a82002366484f85bee8aafb0e1bd/13348930" alt="Blur - Blur" />
+      </div>
+      <div class="title">Blur - Blur</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/e5ec5b4de1d42e4a36e298c50a6682bd/2984854" alt="Slipknot - Slipknot" />
+      </div>
+      <div class="title">Slipknot - Slipknot</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/45d159c535f12195b04472bbb13d53dc/6807170" alt="Evanescence - Fallen" />
+      </div>
+      <div class="title">Evanescence - Fallen</div>
+
+      <div class="vinyl">
+        <img src="//e.snmc.io/i/300/w/fb4993dd5b8fddb51266a3e2adcd524c/12508134" alt="Deftones - Around The Fur" />
+      </div>
+      <div class="title">Deftones - Around The Fur</div>
     </div>
+  </div>
+
+  <div class="vinyl-note">
+    hover for titles :0
+  </div>
+</div>
+```
+
   </section>
 
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
