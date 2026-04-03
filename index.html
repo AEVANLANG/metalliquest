@@ -279,7 +279,6 @@
       animation: float 3s ease-in-out infinite;
     }
 
-    /* ALBUM + NOW PLAYING LAYOUT FIXES */
     .album-stage {
       display: flex;
       align-items: flex-start;
@@ -321,49 +320,19 @@
       .album-info { min-width: 100%; text-align: center; }
     }
 
-    .album-placeholder-icon { font-size: 3.5rem; }
-
-    .vinyl-spin {
+    .corner-deco {
       position: absolute;
-      top: 50%;
-      right: -28px;
-      transform: translateY(-50%);
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #222 28%, #111 30%, #1a1a1a 58%, #111 60%, #222 100%);
-      border: 2px solid #333;
-      box-shadow: 2px 2px 0 #000;
+      width: 16px;
+      height: 16px;
+      border-color: var(--blood);
+      border-style: solid;
+      opacity: 0.7;
     }
 
-    .vinyl-spin::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--crimson);
-      box-shadow: 0 0 4px var(--crimson);
-    }
-
-    .vinyl-spin.spinning { animation: spin 4s linear infinite; }
-
-    .album-info { flex: 1; min-width: 180px; }
-
-    .album-band, .album-name, .album-year, .album-desc { margin-bottom: 0.4rem; }
-
-    /* Now Playing */
-    #np-art { font-size: 4.8rem; }
-
-    #np-progress-container {
-      margin-top: 1.4rem;
-      max-width: 340px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    .corner-deco.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+    .corner-deco.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+    .corner-deco.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+    .corner-deco.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
 
     /* Disable text selection globally but allow on descriptions */
     body, main, section, div, p, span {
@@ -373,21 +342,107 @@
       user-select: none;
       -webkit-touch-callout: none;
     }
-    .album-desc { user-select: text; }
 
-    /* Rest of your original styles */
-    .corner-deco {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      border-color: var(--blood);
-      border-style: solid;
-      opacity: 0.7;
+    .about-text { user-select: text; }
+
+    /* VINYL GALLERY */
+    .vinyl-gallery-wrap {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 0.5rem;
     }
-    .corner-deco.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
-    .corner-deco.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
-    .corner-deco.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
-    .corner-deco.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+    .vinyl-gallery-wrap::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .vinyl-gallery-wrap::-webkit-scrollbar-track {
+      background: #120d09;
+      border: 1px solid var(--dim);
+    }
+
+    .vinyl-gallery-wrap::-webkit-scrollbar-thumb {
+      background: var(--blood);
+    }
+
+    #vinyl-gallery * {
+      all: unset;
+    }
+
+    #vinyl-gallery {
+      all: initial !important;
+      width: max-content !important;
+      min-width: 100% !important;
+      height: 230px !important;
+      margin: 10px 0 0 !important;
+      display: flex !important;
+      flex-direction: row !important;
+      position: relative !important;
+      padding-left: 8px !important;
+      padding-right: 18px !important;
+    }
+
+    #vinyl-gallery .vinyl {
+      all: unset !important;
+      perspective: 500px !important;
+      width: 18px !important;
+      transition: width 0.5s !important;
+      position: relative !important;
+    }
+
+    #vinyl-gallery .vinyl:hover {
+      width: 148px !important;
+    }
+
+    #vinyl-gallery img {
+      all: unset !important;
+      transition: transform 0.5s, width 0.5s, height 0.5s, margin-top 0.5s !important;
+      width: 180px !important;
+      height: 180px !important;
+      transform: rotateX(0deg) rotateY(25deg) !important;
+      transform-style: preserve-3d !important;
+      border-radius: 4px !important;
+      border: 2px solid rgba(0, 0, 0, 0.1) !important;
+      object-fit: cover !important;
+      box-shadow: 0 0 14px rgba(139,0,0,0.35), 4px 4px 0 #000 !important;
+    }
+
+    #vinyl-gallery .vinyl:hover img {
+      transform: rotateX(0deg) rotateY(10deg) !important;
+      width: 188px !important;
+      height: 188px !important;
+      margin-top: -2px !important;
+    }
+
+    #vinyl-gallery .title {
+      color: var(--bone) !important;
+      display: block !important;
+      visibility: hidden !important;
+      position: absolute !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      text-align: center !important;
+      width: 100% !important;
+      padding-left: 6px !important;
+      font-family: 'Share Tech Mono', monospace !important;
+      font-size: 11px !important;
+      letter-spacing: 1px !important;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9) !important;
+      white-space: nowrap !important;
+    }
+
+    #vinyl-gallery .vinyl:nth-child(n):hover + .title {
+      visibility: visible !important;
+    }
+
+    .vinyl-note {
+      margin-top: 1rem;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: #666;
+      letter-spacing: 1px;
+    }
 
     footer {
       border-top: 3px solid var(--blood);
@@ -414,14 +469,32 @@
       margin-top: 0.5rem;
     }
 
-    @keyframes flicker { 0%, 95%, 100% { opacity: 1; } 96% { opacity: 0.8; } 97% { opacity: 1; } 98% { opacity: 0.6; } 99% { opacity: 1; } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-    @keyframes spin { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(360deg); } }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    @keyframes pulse { 0%, 100% { text-shadow: 0 0 15px rgba(240,192,64,0.5); } 50% { text-shadow: 0 0 30px rgba(240,192,64,0.9), 0 0 60px rgba(240,192,64,0.3); } }
-    @keyframes statLoad { from { width: 0; } }
-    @keyframes fadeSlide { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
-    .album-anim { animation: fadeSlide 0.3s ease-out; }
+    @keyframes flicker {
+      0%, 95%, 100% { opacity: 1; }
+      96% { opacity: 0.8; }
+      97% { opacity: 1; }
+      98% { opacity: 0.6; }
+      99% { opacity: 1; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 15px rgba(240,192,64,0.5); }
+      50% { text-shadow: 0 0 30px rgba(240,192,64,0.9), 0 0 60px rgba(240,192,64,0.3); }
+    }
+
+    @keyframes statLoad {
+      from { width: 0; }
+    }
   </style>
 </head>
 <body>
@@ -460,7 +533,6 @@
         And I love it.
       </p>
       <div class="rpg-stats">
-        <!-- your stats remain unchanged -->
         <div class="stat"><span>TASTE</span><div class="stat-bar"><div class="stat-fill" style="width:95%"></div></div><span class="stat-val">95</span></div>
         <div class="stat"><span>NERD</span><div class="stat-bar"><div class="stat-fill" style="width:88%"></div></div><span class="stat-val">88</span></div>
         <div class="stat"><span>ROCK</span><div class="stat-bar"><div class="stat-fill" style="width:100%;background:var(--crimson);box-shadow:0 0 4px var(--crimson)"></div></div><span class="stat-val">MAX</span></div>
@@ -474,7 +546,6 @@
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
 
   <section id="domain">
-    <!-- your domain section unchanged -->
     <div class="section-header">
       <span class="section-title">The Domain</span>
       <div class="section-line"></div>
@@ -503,7 +574,6 @@
 
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
 
-  <!-- NOW PLAYING SECTION -->
   <section id="nowplaying">
     <div class="section-header">
       <span class="section-title">NOW PLAYING</span>
@@ -513,7 +583,7 @@
     <div class="grunge-box" style="text-align:center; position:relative;">
       <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
       <div class="corner-deco bl"></div><div class="corner-deco br"></div>
-      
+
       <div class="album-stage" style="margin-bottom:1rem;">
         <div class="album-art-wrap" style="width:170px;height:170px;">
           <div id="np-art" class="album-art-placeholder"></div>
@@ -525,7 +595,7 @@
         <div id="np-artist" style="font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:var(--rust);">NOTHING IS PLAYING</div>
       </div>
 
-      <div id="np-progress-container">
+      <div id="np-progress-container" style="margin-top:1.4rem; max-width:340px; margin-left:auto; margin-right:auto;">
         <div style="height:5px; background:#111; border:1px solid var(--blood); position:relative; overflow:hidden;">
           <div id="np-progress" style="height:100%; width:0%; background:var(--pixel-green); box-shadow:0 0 6px var(--pixel-green); transition:width .8s linear;"></div>
         </div>
@@ -543,7 +613,6 @@
 
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
 
-  <!-- ALBUMS SECTION -->
   <section id="albums">
     <div class="section-header">
       <span class="section-title">Sacred Texts</span>
@@ -551,39 +620,103 @@
       <span style="font-size:1.2rem">🎵</span>
     </div>
 
-    <div class="album-stage">
-      <div class="album-art-wrap">
-        <div class="album-art-placeholder" id="albumArt">
-          <span class="album-placeholder-icon" id="albumIcon">💿</span>
-          <span id="albumArtLabel" style="font-size:0.6rem;opacity:0.5">add img src in albums[]</span>
+    <div class="grunge-box">
+      <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+      <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+
+      <div class="vinyl-gallery-wrap">
+        <div id="vinyl-gallery">
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/0fa37201b199941562f3078dedf5caae/11993756" alt="Radiohead - OK Computer" />
+          </div>
+          <div class="title">Radiohead - OK Computer</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/4e8c3063c201131309b0b8aca74cbf39/7486511" alt="Kanye West - Graduation" />
+          </div>
+          <div class="title">Kanye West - Graduation</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/b247aad651a50441d1ab19af10b13bdc/2519110" alt="Mamma Mia! Cast - Mamma Mia!" />
+          </div>
+          <div class="title">Mamma Mia! Cast - Mamma Mia!</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/dee39e33a94c9f39f235edc19c1e8aae/3065862" alt="Type O Negative - Life Is Killing Me" />
+          </div>
+          <div class="title">Type O Negative - Life Is Killing Me</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/6d47e24fa1e249c1a1e2e07407949ef6/6019602" alt="Queen - A Night At The Opera" />
+          </div>
+          <div class="title">Queen - A Night At The Opera</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/6367de5980825b58203148d4f3e3115b/11498909" alt="Within Temptation - Bleed Out" />
+          </div>
+          <div class="title">Within Temptation - Bleed Out</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/1efad621d148000adb29a9b5936ddd1a/12096297" alt="Eminem - The Eminem Show" />
+          </div>
+          <div class="title">Eminem - The Eminem Show</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/e0b26a2a4bf44554967d39b384e47a0b/3192426" alt="Eminem - Recovery" />
+          </div>
+          <div class="title">Eminem - Recovery</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/664208ed63016b84e94b30a9302df49e/1311548" alt="Eminem - Encore" />
+          </div>
+          <div class="title">Eminem - Encore</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/c6da6729de4ed204f919c0045a746663/5077469" alt="My Chemical Romance - The Black Parade" />
+          </div>
+          <div class="title">My Chemical Romance - The Black Parade</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/78049219c4c5c75358ed75c3ef41a968/12925580" alt="My Chemical Romance - Three Cheers For Sweet Revenge" />
+          </div>
+          <div class="title">My Chemical Romance - Three Cheers For Sweet Revenge</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/904eac6738aaab5991bf1e012d4aec22/10434801" alt="The Who - Who's Next" />
+          </div>
+          <div class="title">The Who - Who's Next</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/3d66a82002366484f85bee8aafb0e1bd/13348930" alt="Blur - Blur" />
+          </div>
+          <div class="title">Blur - Blur</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/e5ec5b4de1d42e4a36e298c50a6682bd/2984854" alt="Slipknot - Slipknot" />
+          </div>
+          <div class="title">Slipknot - Slipknot</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/45d159c535f12195b04472bbb13d53dc/6807170" alt="Evanescence - Fallen" />
+          </div>
+          <div class="title">Evanescence - Fallen</div>
+
+          <div class="vinyl">
+            <img src="//e.snmc.io/i/300/w/fb4993dd5b8fddb51266a3e2adcd524c/12508134" alt="Deftones - Around The Fur" />
+          </div>
+          <div class="title">Deftones - Around The Fur</div>
         </div>
-        <div class="vinyl-spin" id="vinylEl"></div>
       </div>
 
-      <div class="album-info">
-        <div class="album-band" id="albumBand">—</div>
-        <div class="album-name" id="albumName">—</div>
-        <div class="album-year" id="albumYear">[ ████ ]</div>
-        <div class="album-desc" id="albumDesc">...</div>
-        <div class="pixel-player">
-          <div class="now-playing-dot" id="recDot"></div>
-          <span class="track-label" id="trackLabel">[ NO SIGNAL ]</span>
-          <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ PLAY</button>
-        </div>
+      <div class="vinyl-note">
+        hover for titles • scroll sideways on mobile • yes these are sacred
       </div>
-    </div>
-
-    <div class="album-nav">
-      <button class="nav-btn" onclick="prevAlbum()">◀ PREV</button>
-      <div class="album-dots" id="albumDots"></div>
-      <button class="nav-btn" onclick="nextAlbum()">NEXT ▶</button>
     </div>
   </section>
 
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
 
   <section id="lair">
-    <!-- your lair section unchanged -->
     <div class="section-header">
       <span class="section-title">The Lair</span>
       <div class="section-line"></div>
@@ -619,106 +752,9 @@
 <audio id="audioPlayer"></audio>
 
 <script>
-  // === ALBUMS SCRIPT (unchanged) ===
-  const albums = [ /* your 5 albums here - copy them from your previous file */ 
-    { band: "Metallica", name: "Master of Puppets", year: "1986", desc: "The one that started everything.\nNon-negotiable.", track: "Master of Puppets", icon: "🎸", color: "#c0392b", img: null, audio: null },
-    { band: "Linkin Park", name: "Hybrid Theory", year: "2000", desc: "Yes it's basic. No I do not care.\nIt changed lives.", track: "In the End", icon: "⚡", color: "#4080f0", img: null, audio: null },
-    { band: "System of a Down", name: "Toxicity", year: "2001", desc: "Chaotic. Unhinged. Perfect.\nLike this website.", track: "Chop Suey!", icon: "🔥", color: "#a040c0", img: null, audio: null },
-    { band: "Tool", name: "Ænima", year: "1996", desc: "For when you want to feel things\nyou can't explain.", track: "Forty Six & 2", icon: "🌀", color: "#40a060", img: null, audio: null },
-    { band: "Alice in Chains", name: "Dirt", year: "1992", desc: "Grunge royalty.\nHeavy as the darkness itself.", track: "Would?", icon: "💀", color: "#a04020", img: null, audio: null }
-  ];
-
-  let current = 0;
-  let isPlaying = false;
-  const audioEl = document.getElementById('audioPlayer');
-
-  function renderDots() {
-    const container = document.getElementById('albumDots');
-    container.innerHTML = albums.map((_, i) => `<div class="dot ${i === current ? 'active' : ''}" onclick="goAlbum(${i})"></div>`).join('');
-  }
-
-  function triggerAnim(el) {
-    el.classList.remove('album-anim');
-    void el.offsetWidth;
-    el.classList.add('album-anim');
-  }
-
-  function updateAlbum() {
-    const a = albums[current];
-    document.getElementById('albumBand').textContent = a.band;
-    document.getElementById('albumBand').style.color = a.color;
-    document.getElementById('albumName').textContent = a.name;
-    document.getElementById('albumYear').textContent = `[ ${a.year} ]`;
-    document.getElementById('albumDesc').textContent = a.desc;
-    document.getElementById('trackLabel').textContent = `♪ ${a.track}`;
-    document.getElementById('albumIcon').textContent = a.icon;
-
-    const artEl = document.getElementById('albumArt');
-    if (a.img) {
-      artEl.innerHTML = `<img src="${a.img}" style="width:100%;height:100%;object-fit:cover;display:block;" />`;
-    } else {
-      artEl.innerHTML = `<span class="album-placeholder-icon" id="albumIcon">${a.icon}</span><span style="font-size:0.6rem;opacity:0.5">add img src in albums[]</span>`;
-    }
-    artEl.style.borderColor = a.color;
-
-    triggerAnim(document.getElementById('albumBand'));
-    triggerAnim(document.getElementById('albumDesc'));
-    stopPlayback();
-    renderDots();
-  }
-
-  function stopPlayback() {
-    isPlaying = false;
-    audioEl.pause();
-    audioEl.currentTime = 0;
-    document.getElementById('playBtn').textContent = '▶ PLAY';
-    document.getElementById('recDot').classList.remove('active');
-    document.getElementById('vinylEl').classList.remove('spinning');
-  }
-
-  function prevAlbum() { current = (current - 1 + albums.length) % albums.length; updateAlbum(); }
-  function nextAlbum() { current = (current + 1) % albums.length; updateAlbum(); }
-  function goAlbum(i) { current = i; updateAlbum(); }
-
-  function togglePlay() {
-    const a = albums[current];
-    if (!a.audio) {
-      document.getElementById('trackLabel').textContent = '[ ADD AUDIO URL IN albums[] ]';
-      return;
-    }
-    if (!isPlaying) {
-      audioEl.src = a.audio;
-      audioEl.play();
-      isPlaying = true;
-      document.getElementById('playBtn').textContent = '■ STOP';
-      document.getElementById('recDot').classList.add('active');
-      document.getElementById('vinylEl').classList.add('spinning');
-    } else {
-      stopPlayback();
-    }
-  }
-
-  audioEl.addEventListener('ended', stopPlayback);
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft') prevAlbum();
-    if (e.key === 'ArrowRight') nextAlbum();
-  });
-
-  let touchX = null;
-  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (touchX === null) return;
-    const diff = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? nextAlbum() : prevAlbum();
-    touchX = null;
-  });
-
-  renderDots();
-  updateAlbum();
-
-  // === IMPROVED LAST.FM SCRIPT ===
   const LASTFM_USER = "phil10089";
   const LASTFM_API_KEY = "9f634a123fb3900e4871c4e642fe82bf";
+  let npProgressInterval = null;
 
   async function fetchNowPlaying() {
     try {
@@ -733,36 +769,46 @@
       const artistEl = document.getElementById('np-artist');
       const progressContainer = document.getElementById('np-progress-container');
 
+      artEl.innerHTML = track.image?.[3]?.['#text']
+        ? `<img src="${track.image[3]['#text']}" style="width:100%;height:100%;object-fit:cover;" alt="${track.name} cover" />`
+        : '💀';
+
+      trackEl.textContent = track.name.toUpperCase();
+      artistEl.textContent = isNowPlaying
+        ? track.artist["#text"].toUpperCase()
+        : track.artist["#text"].toUpperCase() + " — RECENT";
+
       if (isNowPlaying) {
-        artEl.innerHTML = track.image?.[3]?.['#text'] ? `<img src="${track.image[3]['#text']}" style="width:100%;height:100%;object-fit:cover;" />` : '💀';
-        trackEl.textContent = track.name.toUpperCase();
-        artistEl.textContent = track.artist["#text"].toUpperCase();
         progressContainer.style.display = "block";
         simulateProgress();
       } else {
-        artEl.innerHTML = track.image?.[3]?.['#text'] ? `<img src="${track.image[3]['#text']}" style="width:100%;height:100%;object-fit:cover;" />` : '💀';
-        trackEl.textContent = track.name.toUpperCase();
-        artistEl.textContent = track.artist["#text"].toUpperCase() + " — RECENT";
         progressContainer.style.display = "none";
+        if (npProgressInterval) clearInterval(npProgressInterval);
       }
     } catch(e) {
-      console.log("Last.fm error");
+      console.log("Last.fm error", e);
     }
   }
 
   function simulateProgress() {
     const progress = document.getElementById('np-progress');
     const elapsedEl = document.getElementById('np-time-elapsed');
+    const totalEl = document.getElementById('np-time-total');
     let elapsed = 0;
     const duration = 240;
 
+    if (npProgressInterval) clearInterval(npProgressInterval);
+
     progress.style.width = "0%";
-    const int = setInterval(() => {
+    elapsedEl.textContent = "0:00";
+    totalEl.textContent = "4:00";
+
+    npProgressInterval = setInterval(() => {
       elapsed += 3;
       const percent = Math.min((elapsed / duration) * 100, 100);
       progress.style.width = percent + "%";
-      elapsedEl.textContent = `${Math.floor(elapsed/60)}:${(elapsed%60).toString().padStart(2,'0')}`;
-      if (percent >= 100) clearInterval(int);
+      elapsedEl.textContent = `${Math.floor(elapsed / 60)}:${(elapsed % 60).toString().padStart(2,'0')}`;
+      if (percent >= 100) clearInterval(npProgressInterval);
     }, 900);
   }
 
