@@ -663,6 +663,48 @@ footer {
 
   <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
 
+<section id="nowplaying">
+  <div class="section-header">
+    <span class="section-title">NOW PLAYING</span>
+    <div class="section-line"></div>
+    <span style="font-size:1.2rem">📡</span>
+  </div>
+  
+  <div class="grunge-box" style="text-align:center; position:relative;">
+    <div class="corner-deco tl"></div><div class="corner-deco tr"></div>
+    <div class="corner-deco bl"></div><div class="corner-deco br"></div>
+    
+    <div class="album-stage" style="margin-bottom:1rem;">
+      <div class="album-art-wrap" style="width:180px; height:180px;">
+        <div id="np-art" class="album-art-placeholder" style="width:100%; height:100%; font-size:5rem; display:flex; align-items:center; justify-content:center;">
+          💀
+        </div>
+      </div>
+    </div>
+
+    <div id="np-info">
+      <div id="np-track" style="font-family:'Special Elite',cursive; font-size:1.1rem; color:var(--bone); margin:0.4rem 0 0.2rem 0;">THE SOUND OF SILENCE</div>
+      <div id="np-artist" style="font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:var(--rust); letter-spacing:1px;">NOTHING IS PLAYING</div>
+    </div>
+
+    <div id="np-progress-container" style="margin-top:1.2rem; max-width:320px; margin-left:auto; margin-right:auto;">
+      <div style="height:4px; background:#111; border:1px solid var(--blood); position:relative; overflow:hidden;">
+        <div id="np-progress" style="height:100%; width:0%; background:var(--pixel-green); box-shadow:0 0 6px var(--pixel-green); transition:width 1s linear;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:#555; margin-top:4px;">
+        <span id="np-time-elapsed">0:00</span>
+        <span id="np-time-total">-:--</span>
+      </div>
+    </div>
+
+    <div class="sarcasm-fine-print" style="margin-top:1rem;">
+      powered by last.fm • probably listening to something obnoxious
+    </div>
+  </div>
+</section>
+
+  <div class="pixel-divider">░░░ ☠ ⊱ ✦ ⊰ ☠ ░░░</div>
+
   <section id="albums">
     <div class="section-header">
       <span class="section-title">Sacred Texts</span>
@@ -897,6 +939,77 @@ footer {
 
   renderDots();
   updateAlbum();
+</script>
+<script>
+// ==================== LAST.FM NOW PLAYING ====================
+const LASTFM_USER = "phil10089";
+const LASTFM_API_KEY = "YOUR_API_KEY_HERE";   // ← Get this from last.fm/api
+
+let lastTrack = null;
+
+async function fetchNowPlaying() {
+  try {
+    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
+    const data = await res.json();
+
+    const track = data.recenttracks?.track?.[0];
+    if (!track) return;
+
+    const isNowPlaying = track["@attr"] && track["@attr"].nowplaying === "true";
+
+    const artEl = document.getElementById('np-art');
+    const trackEl = document.getElementById('np-track');
+    const artistEl = document.getElementById('np-artist');
+    const progressContainer = document.getElementById('np-progress-container');
+
+    if (isNowPlaying) {
+      // Currently playing
+      artEl.innerHTML = `<img src="${track.image[3]['#text'] || ''}" style="width:100%;height:100%;object-fit:cover;" alt="album art">`;
+      trackEl.textContent = track.name.toUpperCase();
+      artistEl.textContent = track.artist["#text"].toUpperCase();
+      
+      // Fake progress bar (Last.fm doesn't give real timestamps easily)
+      progressContainer.style.display = "block";
+      simulateProgress(track);
+    } else {
+      // Nothing playing
+      artEl.innerHTML = '💀';
+      artEl.style.fontSize = '5rem';
+      trackEl.textContent = "THE SOUND OF SILENCE";
+      artistEl.textContent = "NOTHING IS PLAYING";
+      progressContainer.style.display = "none";
+    }
+  } catch(e) {
+    console.log("Last.fm fetch failed (probably rate limited)");
+  }
+}
+
+// Fake progress bar (looks cool, good enough)
+function simulateProgress(track) {
+  const progress = document.getElementById('np-progress');
+  const elapsedEl = document.getElementById('np-time-elapsed');
+  const totalEl = document.getElementById('np-time-total');
+  
+  // Rough duration estimate
+  let duration = 240; // assume 4 minutes
+  let elapsed = Math.floor(Math.random() * 180);
+  
+  progress.style.width = "0%";
+  
+  const interval = setInterval(() => {
+    elapsed++;
+    const percent = Math.min((elapsed / duration) * 100, 100);
+    progress.style.width = percent + "%";
+    
+    elapsedEl.textContent = `${Math.floor(elapsed/60)}:${(elapsed%60).toString().padStart(2,'0')}`;
+    
+    if (percent >= 100) clearInterval(interval);
+  }, 1000);
+}
+
+// Run immediately and then every 25 seconds
+fetchNowPlaying();
+setInterval(fetchNowPlaying, 25000);
 </script>
 
 </body>
