@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SenA Food Stadskanaal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf6f0;
+      --dark: #1a1208;
+      --green: #2d5a27;
+      --green-light: #4a8c42;
+      --terracotta: #c8522a;
+      --gold: #d4a847;
+      --warm-gray: #8a7d6e;
+      --section-pad: clamp(4rem, 10vw, 8rem);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 5%;
+      background: rgba(250, 246, 240, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,18,8,0.08);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--terracotta); }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--terracotta); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 5rem;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(3rem, 8vw, 7rem) 5% clamp(3rem, 8vw, 7rem) 7%;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--dark);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+    .hero-sub {
+      margin-top: 1.75rem;
+      font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+      font-weight: 300;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      max-width: 38ch;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .hero-ctas {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--green-light); transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid var(--dark);
+      color: var(--dark);
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: border-color 0.25s, color 0.25s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--terracotta); color: var(--terracotta); transform: translateY(-2px); }
+
+    .hero-rating {
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 0.05em; }
+    .rating-text { font-size: 0.82rem; color: var(--warm-gray); }
+    .rating-text strong { color: var(--dark); }
+
+    .hero-right {
+      position: relative;
+      background: var(--green);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-art {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      grid-template-rows: repeat(4,1fr);
+      gap: 0;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.4s forwards;
+    }
+    .hero-art-item {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s;
+    }
+    .hero-art-item:hover { transform: scale(1.2); }
+    .hero-overlay-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+    }
+    .hero-overlay-text p {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-style: italic;
+      font-weight: 700;
+      opacity: 0.25;
+      letter-spacing: 0.03em;
+      transform: rotate(-5deg);
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: var(--section-pad) 7%; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--dark);
+    }
+    .section-title em { color: var(--green); font-style: italic; }
+
+    /* ── ABOUT ── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-card {
+      background: var(--green);
+      color: #fff;
+      border-radius: 24px;
+      padding: clamp(2.5rem, 5vw, 4rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .about-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 150px; height: 150px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .about-card-emoji { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .about-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .about-card p { font-size: 0.95rem; line-height: 1.7; opacity: 0.85; }
+    .about-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .about-stat {
+      background: rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+    }
+    .about-stat strong {
+      display: block;
+      font-size: 1.6rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+    }
+    .about-stat span { font-size: 0.78rem; opacity: 0.75; }
+
+    .about-text p {
+      font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+      line-height: 1.8;
+      color: var(--warm-gray);
+      margin-bottom: 1.25rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--dark); }
+
+    /* ── PRODUCTS ── */
+    .products-section { background: var(--dark); }
+    .products-section .section-label { color: var(--gold); }
+    .products-section .section-title { color: #fff; }
+    .products-section .section-title em { color: var(--gold); }
+    .products-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .products-sub {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.5);
+      max-width: 40ch;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .product-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: background 0.3s, transform 0.3s, border-color 0.3s;
+      cursor: default;
+    }
+    .product-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-6px);
+    }
+    .product-emoji { font-size: 3rem; display: block; margin-bottom: 1rem; }
+    .product-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .product-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+    /* ── REVIEWS ── */
+    .reviews-section { background: #fff; }
+    .reviews-header { margin-bottom: 3rem; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .review-card {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      border: 1px solid rgba(26,18,8,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .review-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(26,18,8,0.1);
+    }
+    .review-stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; }
+    .review-text {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+    .review-author { font-size: 0.82rem; font-weight: 600; color: var(--dark); }
+    .review-quote {
+      position: absolute;
+      top: 1.5rem; right: 1.75rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      color: var(--green);
+      opacity: 0.08;
+      line-height: 1;
+    }
+
+    /* ── VISIT / CONTACT ── */
+    .visit-section {
+      background: var(--terracotta);
+      color: #fff;
+    }
+    .visit-section .section-label { color: rgba(255,255,255,0.6); }
+    .visit-section .section-title { color: #fff; }
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: start;
+      margin-top: 3rem;
+    }
+    .info-block { margin-bottom: 2rem; }
+    .info-block h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+    }
+    .info-block p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .info-block a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    .hours-table { width: 100%; }
+    .hours-table tr td { padding: 0.35rem 0; font-size: 0.93rem; }
+    .hours-table td:last-child { text-align: right; opacity: 0.75; }
+    .map-placeholder {
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .map-placeholder:hover { background: rgba(0,0,0,0.3); }
+    .map-placeholder span:first-child { font-size: 2.5rem; }
+    .map-placeholder p { color: #fff; font-size: 0.9rem; font-weight: 600; opacity: 0.85; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 2rem 5%;
+      font-size: 0.8rem;
+    }
+    footer strong { color: rgba(255,255,255,0.7); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { min-height: 260px; order: -1; }
+      .about { grid-template-columns: 1fr; }
+      .visit-grid { grid-template-columns: 1fr; }
+      section { padding: 4rem 5%; }
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- NAV -->
+
+  <nav>
+    <div class="nav-logo">Sena<span>.</span>Food</div>
+    <ul>
+      <li><a href="#over-ons">Over ons</a></li>
+      <li><a href="#producten">Producten</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#bezoek">Bezoek ons</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Stadskanaal · Europalaan 1B</p>
+      <h1>Dé brug tussen<br /><em>oost & west</em></h1>
+      <p class="hero-sub">
+        Verse groente, fruit, vlees en kruidenierswaren uit de hele wereld — voor de laagste prijzen in Stadskanaal.
+      </p>
+      <div class="hero-ctas">
+        <a href="#producten" class="btn-primary">Ons assortiment</a>
+        <a href="#bezoek" class="btn-outline">Kom langs</a>
+      </div>
+      <div class="hero-rating">
+        <span class="stars">★★★★★</span>
+        <span class="rating-text"><strong>4.6 / 5</strong> &nbsp;·&nbsp; 94% beveelt ons aan</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-art">
+        <div class="hero-art-item">🥦</div>
+        <div class="hero-art-item">🍋</div>
+        <div class="hero-art-item">🌶️</div>
+        <div class="hero-art-item">🫚</div>
+        <div class="hero-art-item">🐔</div>
+        <div class="hero-art-item">🥭</div>
+        <div class="hero-art-item">🧅</div>
+        <div class="hero-art-item">🍅</div>
+        <div class="hero-art-item">🌿</div>
+        <div class="hero-art-item">🫙</div>
+        <div class="hero-art-item">🍇</div>
+        <div class="hero-art-item">🥩</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+
+  <section id="over-ons">
+    <div class="about">
+      <div class="about-visual">
+        <div class="about-card">
+          <span class="about-card-emoji">🌍</span>
+          <h3>Wereld op je bord</h3>
+          <p>Van verse Aziatische groenten tot Afrikaanse specerijen en Turkse kruidenierswaren — alles onder één dak in het hart van Stadskanaal.</p>
+          <div class="about-stat-row">
+            <div class="about-stat">
+              <strong>4.6★</strong>
+              <span>Google Reviews</span>
+            </div>
+            <div class="about-stat">
+              <strong>94%</strong>
+              <span>Aanbevolen</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="section-label">Over SenA Food</p>
+        <h2 class="section-title">Kwaliteit die je <em>proeft</em></h2>
+        <br />
+        <p>SenA Food is meer dan een supermarkt — het is een ontmoetingsplek waar culturen samenkomen via eten. We brengen dagelijks verse producten binnen: van knapperige groente en rijp fruit tot verse kip en vleesproducten van hoge kwaliteit.</p>
+        <p>Onze klanten waarderen de <strong>persoonlijke benadering</strong>, de ruime keuze en de eerlijke prijzen. Of je nu op zoek bent naar een specifiek kruid, exotisch fruit of gewoon de beste kip van Stadskanaal — bij SenA Food ben je aan het juiste adres.</p>
+        <p>Verse producten, lage prijzen. Dat is onze belofte.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+
+  <section id="producten" class="products-section">
+    <div class="products-header">
+      <div>
+        <p class="section-label">Assortiment</p>
+        <h2 class="section-title">Vers. Divers. <em>Betaalbaar.</em></h2>
+      </div>
+      <p class="products-sub">Elke dag vers aangevuld met de beste producten uit alle windstreken.</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <span class="product-emoji">🥦</span>
+        <p class="product-name">Verse Groenten</p>
+        <p class="product-desc">Uitgebreid assortiment, dagelijks vers</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🍊</span>
+        <p class="product-name">Vers Fruit</p>
+        <p class="product-desc">Tropisch & seizoensgebonden fruit</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🐔</span>
+        <p class="product-name">Verse Kip</p>
+        <p class="product-desc">Halal, vers en van topkwaliteit</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🥩</span>
+        <p class="product-name">Vleesproducten</p>
+        <p class="product-desc">Vers vlees, dagelijks aangeleverd</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🌿</span>
+        <p class="product-name">Kruiden & Specerijen</p>
+        <p class="product-desc">Van basilicum tot sumak</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🫙</span>
+        <p class="product-name">Internationale Producten</p>
+        <p class="product-desc">Uit Azië, Afrika, het Midden-Oosten en meer</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+
+  <section id="reviews" class="reviews-section">
+    <div class="reviews-header">
+      <p class="section-label">Wat klanten zeggen</p>
+      <h2 class="section-title">Gewaardeerd door <em>de buurt</em></h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-quote">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Geweldige winkel met een breed assortiment aan verse producten. De kwaliteit is top en de prijzen zijn heel redelijk. Hier kom ik elke week.</p>
+        <p class="review-author">Google Review</p>
+      </div>
+      <div class="review-card">
+        <div class="review-quote">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Eindelijk een plek in Stadskanaal waar je al je internationale ingrediënten kunt vinden. Altijd vers, altijd vriendelijk geholpen.</p>
+        <p class="review-author">Facebook Review</p>
+      </div>
+      <div class="review-card">
+        <div class="review-quote">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">De beste verse kip en groenten van de stad. Echt een aanrader voor iedereen die van lekker en vers eten houdt. Zeker een aanrader!</p>
+        <p class="review-author">Google Review</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+
+  <section id="bezoek" class="visit-section">
+    <p class="section-label">Vind ons</p>
+    <h2 class="section-title">Kom langs</h2>
+    <div class="visit-grid">
+      <div>
+        <div class="info-block">
+          <h4>Adres</h4>
+          <p>Europalaan 1B<br />9501 DA Stadskanaal<br />Nederland</p>
+        </div>
+        <div class="info-block">
+          <h4>Telefoon</h4>
+          <p><a href="tel:+31617585583">06 17 58 55 83</a></p>
+        </div>
+        <div class="info-block">
+          <h4>Sociale media</h4>
+          <p><a href="https://www.facebook.com/SenAStadskanaal/" target="_blank" rel="noopener">Facebook: SenA Food Stadskanaal</a><br />
+          <a href="https://www.instagram.com/senafoodstadskanaal/" target="_blank" rel="noopener">Instagram: @senafoodstadskanaal</a></p>
+        </div>
+        <div class="info-block">
+          <h4>Openingstijden</h4>
+          <table class="hours-table">
+            <tr><td>Maandag – Zaterdag</td><td>09:00 – 19:00</td></tr>
+            <tr><td>Zondag</td><td>Op aanvraag</td></tr>
+          </table>
+        </div>
+      </div>
+      <a class="map-placeholder" href="https://maps.google.com/?q=Europalaan+1B+Stadskanaal" target="_blank" rel="noopener">
+        <span>📍</span>
+        <p>Open in Google Maps</p>
+        <p style="font-size:0.8rem; font-weight:400; opacity:0.6;">Europalaan 1B · Stadskanaal</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <p>&copy; 2025 <strong>SenA Food Stadskanaal</strong> — Dé brug tussen oost & west.</p>
+  </footer>
+
+</body>
+</html>
